@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/dbConfig');
 const authRoutes = require('./routes/authRoutes');
+const attendanceRoutes = require('./routes/attendanceRoutes');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/api/auth', authRoutes); 
+app.use('/api/attendance', attendanceRoutes);
 
 
 app.listen(port, () => {
