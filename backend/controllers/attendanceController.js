@@ -42,7 +42,8 @@ exports.markAttendanceByDateRange = async (req, res) => {
         const newAttendance = new Attendance({
           admissionNumber,
           date: date.toDate(),  // Save the date as a Date object
-          month: date.month() + 1 // month index starting from 0, so we add 1
+          month: date.month() + 1, // month index starting from 0, so we add 1
+          global: false  // Mark as individual attendance
         });
         await newAttendance.save();
       }
