@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./loginPage/loginPage";
 import UserProfile from './userProfile/userProfile';
+import AdminPage from './admindashboard/admin';
 
 export default function App() {
   // const isAuthenticated = !!localStorage.getItem('token');
@@ -16,6 +17,7 @@ export default function App() {
           element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   );
