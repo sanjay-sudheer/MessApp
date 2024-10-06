@@ -5,7 +5,7 @@ const Attendance = require('../models/attendanceModel');  // Import the Attendan
 
 exports.markAttendanceByDateRange = async (req, res) => {
   try {
-    const { inmateID, startDate, endDate } = req.body;
+    const { admissionNumber, startDate, endDate } = req.body;  // Use admissionNumber
 
     // Get the current date in IST (Indian Standard Time, UTC+5:30)
     const currentDate = moment().tz('Asia/Kolkata').startOf('day');  // Current date at midnight in IST
@@ -25,12 +25,12 @@ exports.markAttendanceByDateRange = async (req, res) => {
 
     // Step 3: Mark attendance as Absent for each date in the range
     for (let date = start; date.isSameOrBefore(end); date.add(1, 'days')) {
-      let existingRecord = await Attendance.findOne({ inmateID, date: date.toDate() });
+      let existingRecord = await Attendance.findOne({ admissionNumber, date: date.toDate() });
 
       if (!existingRecord) {
         // Create a new absence record if it doesn't exist
         const newAttendance = new Attendance({
-          inmateID,
+          admissionNumber,
           date: date.toDate(),
           month: date.month() + 1  // moment.js returns month index starting from 0, so we add 1
         });

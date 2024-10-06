@@ -13,20 +13,17 @@ exports.login = async (req, res) => {
   try {
     // Find the user by admission number (username)
     const inmate = await Inmate.findOne({ admissionNumber });
-    console.log(inmate);
     if (!inmate) {
-      return res.status(400).json({ message: 'Invalid credentials1' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     // Compare raw room number directly (no hashing)
     if (roomNumber !== inmate.roomNumber) {
-      return res.status(400).json({ message: 'Invalid credentials2' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     // Generate JWT token
-    const token = jwt.sign({ admissionNumber: inmate.admissionNumber }, process.env.JWT_SECRET, {
-      expiresIn: '1h'  // Token expires in 1 hour
-    });
+    const token = jwt.sign({ admissionNumber: inmate.admissionNumber }, process.env.JWT_SECRET);
 
     res.status(200).json({
       message: 'Login successful',
