@@ -1,5 +1,6 @@
 // Component.js
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import './admin.css';
 // Basic button component
 function Button({ children, onClick, className }) {
@@ -88,7 +89,7 @@ export default function AdminPage() {
               <p>Manage mess cuts for all students</p>
             </div>
             <div className="card-content">
-              <Button className="full-button">💳 Manage Global Messcut</Button>
+              <Link to="/global-mess" className="full-button">💳 Manage Global Messcut</Link>
             </div>
           </div>
           <div className="card">
@@ -97,7 +98,7 @@ export default function AdminPage() {
               <p>Generate and view monthly attendance reports</p>
             </div>
             <div className="card-content">
-              <Button className="full-button">👥 View Monthly Report</Button>
+              <Link to="/viewreport" className="full-button">👥 View Monthly Report</Link>
             </div>
           </div>
           <div className="card">

@@ -1,0 +1,49 @@
+/* Style for the report container */
+.report-container {
+      width: 90%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    /* Style for the table */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 18px;
+      text-align: left;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Table header styling */
+    .report-table thead tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: left;
+      font-weight: bold;
+    }
+    
+    /* Table body row styling */
+    .report-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+    }
+    
+    .report-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+    
+    .report-table tbody tr:last-of-type {
+      border-bottom: 2px solid #009879;
+    }
+    
+    /* Padding for table cells */
+    .report-table th,
+    .report-table td {
+      padding: 12px 15px;
+    }
+    
+    /* Hover effect for rows */
+    .report-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    

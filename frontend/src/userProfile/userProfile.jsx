@@ -1,22 +1,44 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './userProfile.css';
-import userProfilePicture from '../assests/user-profile-icon-removebg-preview.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserProfile() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [percentage, setPercentage] = useState(100);
-  const [diff, setDiff] = useState(0); 
+  const [diff, setDiff] = useState(0);
+  const [userDetails, setUserDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const currDate = new Date().toISOString().split('T')[0];
   const messCutGraph = useRef();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storedUserDetails = localStorage.getItem('inmate');
+    
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    
+    if (storedUserDetails) {
+      try {
+        const parsedDetails = JSON.parse(storedUserDetails);
+        setUserDetails(parsedDetails);
+      } catch (error) {
+        console.error('Error parsing user details:', error);
+        localStorage.removeItem('inmate');
+        navigate('/login');
+      }
+    }
+  }, [navigate]);
 
   const handleMessCut = (e) => {
     e.preventDefault();
-    setFromDate('');
-    setToDate('');
+    changeAttendance();
   };
 
-  // Function to calculate the number of days in a month
   const numberOfDays = (month, year) => {
     if (month === 2) {
       return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28;
@@ -24,66 +46,124 @@ export default function UserProfile() {
     return [1, 3, 5, 7, 8, 10, 12].includes(month) ? 31 : 30;
   };
 
-  // Function to calculate the difference in days between two dates
   const calculateDaysBetweenDates = (start, end) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
-
-    // Calculate the difference in days
     const timeDiff = endDate.getTime() - startDate.getTime();
-//     console.log(timeDiff);
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Adding 1 to include the start day
-//     console.log(dayDiff);
-    return dayDiff;
+    return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
   };
 
-  const changeAttendance = () => {
-    if (fromDate && toDate && new Date(toDate) >= new Date(fromDate)) {
-      const days = calculateDaysBetweenDates(fromDate, toDate);
-      const currentMonth = new Date(fromDate).getMonth() + 1;
-      const currentYear = new Date(fromDate).getFullYear();
+  const updateAttendanceUI = (startDate, endDate) => {
+    const days = calculateDaysBetweenDates(startDate, endDate);
+    const currentMonth = new Date(startDate).getMonth() + 1;
+    const currentYear = new Date(startDate).getFullYear();
 
-      // Update the total days of mess cut (sum of intervals)
-      setDiff((prevDiff) => {
-        const newDiff = prevDiff + days;
+    setDiff((prevDiff) => {
+      const newDiff = prevDiff + days;
+      const daysInMonth = numberOfDays(currentMonth, currentYear);
+      const newPercentage = Math.max(0, 100 - Math.ceil((newDiff / daysInMonth) * 100));
+      setPercentage(newPercentage);
 
-        // Update the percentage
-        const daysInMonth = numberOfDays(currentMonth, currentYear);
-        const newPercentage = 100 - Math.ceil((newDiff / daysInMonth) * 100);
-        setPercentage(newPercentage);
+      if (messCutGraph.current) {
+        messCutGraph.current.style.width = `${newPercentage}%`;
+      }
 
-        // Update the width of the attendance graph
-        if (messCutGraph.current) {
-          messCutGraph.current.style.width = `${newPercentage}%`;
-        }
+      return newDiff;
+    });
+  };
 
-        return newDiff; // Return the updated total days of mess cut
+  const handleAuthError = () => {
+    alert('Your session has expired. Please log in again.');
+    localStorage.removeItem('token');
+    localStorage.removeItem('inmate');
+    navigate('/login');
+  };
+
+  const changeAttendance = async () => {
+    if (!fromDate || !toDate) {
+      alert("Please select both start and end dates.");
+      return;
+    }
+
+    if (new Date(toDate) < new Date(fromDate)) {
+      alert("End date cannot be before start date.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem('token');
+      const admissionNumber = userDetails?.admissionNumber;
+      
+      if (!token || !admissionNumber) {
+        handleAuthError();
+        return;
+      }
+
+      const requestData = {
+        admissionNumber,
+        startDate: fromDate,
+        endDate: toDate
+      };
+
+      const response = await fetch('http://localhost:5000/api/attendance/mark', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+        body: JSON.stringify(requestData),
       });
-    } else {
-      alert("Double-check the dates!");
+
+      if (response.status === 401) {
+        handleAuthError();
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || `Server error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Attendance marked successfully', result);
+
+      updateAttendanceUI(fromDate, toDate);
+      
+      // Clear form after successful submission
+      setFromDate('');
+      setToDate('');
+
+    } catch (error) {
+      console.error('Error details:', error);
+      alert(`Failed to mark attendance: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Use useEffect to log the updated diff value
-  useEffect(() => {
-//     console.log(diff); // Now logs the updated diff value
-//     console.log(currDate);
-  }, [diff]);
+  const logoutUser = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('inmate');
+    navigate("/login");
+  };
 
-  const logoutUser = ()=>{
-      localStorage.removeItem('token');
+  if (!userDetails) {
+    return <div>Loading...</div>;
   }
+
   return (
     <div className='mainOuter'>
       <div className="userProfile">
-        <div className="header">
+        <div className="userheader">
           <div className="profileIcon">
-            <img src={userProfilePicture} alt="" />
+           
           </div>
           <div className="userNameDescription">
-            <span className='userName'>John Doe</span>
+            <span className='userName'>{userDetails.name}</span>
             <br />
-            <span className='userDescription'>men's hostel</span>
+            <span className='userDescription'>Men's Hostel</span>
           </div>
           <div className="logoutButton">
             <button onClick={logoutUser}>LogOut</button>
@@ -102,7 +182,7 @@ export default function UserProfile() {
             <input
               type="date"
               id="from"
-              max={currDate}
+              min={currDate}
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               required
@@ -111,12 +191,17 @@ export default function UserProfile() {
             <input
               type="date"
               id="to"
-              max={currDate}
+              min={currDate}
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
               required
             />
-            <button type='submit' onClick={changeAttendance}>Submit</button>
+            <button 
+              type='submit' 
+              disabled={isLoading}
+            >
+              {isLoading ? 'Submitting...' : 'Submit'}
+            </button>
           </form>
         </div>
       </div>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import './loginPage.css';
 
 export default function LoginPage() {
   const [admissionNumber, setAdmissionNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();  // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +25,15 @@ export default function LoginPage() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token); // Store token in local storage
+        localStorage.setItem('inmate', JSON.stringify(data.inmate)); // Store inmate data in local storage
         console.log('JWT Token:', data.token); // Log the token in the console
+        console.log('Inmate Data:', data.inmate); // Log inmate data in the console
+
         setPassword('');
         setAdmissionNumber('');
-        console.log(response)
-        // Redirect or show success message
+
+        // Navigate to a new route after successful login
+        navigate('/user-profile');  // Redirect to the dashboard or desired page
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Login failed');
@@ -36,6 +43,10 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    console.log(localStorage.getItem('token'));
+    console.log(JSON.parse(localStorage.getItem('inmate'))); // Log inmate data from local storage
+  }, []);
 
   return (
     <div className='mainOuter'>
