@@ -6,7 +6,6 @@ const attendanceSchema = new mongoose.Schema({
   admissionNumber: { type: String, required: true },  // Reference to the Inmate by admission number
   date: { type: Date, required: true },               // The specific date marked as Absent
   month: { type: Number, required: true },             // Month of the absence for quick retrieval (1-12)
-  global : { type: Boolean, required:true }          // Global attendance flag
 });
 
 module.exports = mongoose.model('Attendance', attendanceSchema);

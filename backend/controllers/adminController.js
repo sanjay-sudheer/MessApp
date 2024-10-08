@@ -1,12 +1,12 @@
-// controllers/adminController.js
-
 const moment = require('moment-timezone');
 const Attendance = require('../models/attendanceModel');
 const Inmate = require('../models/inmateModel');
+const MessCut = require('../models/messCutModel');
 
+// Controller to mark global attendance (mess cut)
 exports.markGlobalAttendance = async (req, res) => {
   try {
-    const { startDate, endDate } = req.body; // Expecting a date range
+    const { startDate, endDate } = req.body;
 
     // Ensure the incoming dates are in IST and set to midday
     const start = moment.tz(startDate, 'Asia/Kolkata').set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
@@ -21,32 +21,20 @@ exports.markGlobalAttendance = async (req, res) => {
       return res.status(400).json({ message: 'Start date must be before or the same as end date' });
     }
 
-    // Step to find all inmates
-    const inmates = await Inmate.find();
+    // Create and save the new MessCut record (Global Absence)
+    const newMessCut = new MessCut({
+      startDate: start.toDate(),
+      endDate: end.toDate(),
+    });
 
-    // Mark attendance for each inmate over the date range
-    for (let date = start; date.isSameOrBefore(end); date.add(1, 'days')) {
-      await Promise.all(inmates.map(async (inmate) => {
-        const existingRecord = await Attendance.findOne({ admissionNumber: inmate.admissionNumber, date: date.toDate() });
-
-        if (!existingRecord) {
-          const newAttendance = new Attendance({
-            admissionNumber: inmate.admissionNumber,
-            date: date.toDate(),  // Save the date as a Date object
-            month: date.month() + 1, // month index starting from 0, so we add 1
-            global: true  // Mark as global attendance
-          });
-          await newAttendance.save(); // Save new attendance record
-        }
-      }));
-    }
-
-    return res.status(200).json({ message: 'Global attendance marked successfully' });
+    await newMessCut.save();
+    return res.status(201).json({ message: 'Global attendance (mess cut) marked successfully', messCut: newMessCut });
   } catch (error) {
     res.status(500).json({ message: 'Error processing global attendance', error });
   }
 };
 
+// Controller to generate the monthly report, including global absences from the MessCut model
 exports.generateMonthlyReport = async (req, res) => {
   try {
     const { month, year } = req.body;
@@ -67,6 +55,22 @@ exports.generateMonthlyReport = async (req, res) => {
       return res.status(404).json({ message: 'No inmates found' });
     }
 
+    // Fetch all mess cuts that overlap with the current month
+    const messCuts = await MessCut.find({
+      startDate: { $lte: endDate.toDate() },
+      endDate: { $gte: startDate.toDate() }
+    });
+
+    // Convert messCuts into an array of dates for easy checking
+    const globalAbsentDates = [];
+    messCuts.forEach(messCut => {
+      const cutStart = moment(messCut.startDate).startOf('day');
+      const cutEnd = moment(messCut.endDate).endOf('day');
+      for (let date = cutStart; date.isSameOrBefore(cutEnd); date.add(1, 'days')) {
+        globalAbsentDates.push(date.format('YYYY-MM-DD'));
+      }
+    });
+
     // Initialize report data
     const report = [];
 
@@ -83,45 +87,50 @@ exports.generateMonthlyReport = async (req, res) => {
       let totalAbsences = 0;
       let globalAbsences = 0;
       let normalAbsences = 0;
-      let absenceStreak = 0;
-      let previousDayAbsent = false;
+      let consecutiveAbsenceDates = [];  // To store consecutive absence dates
 
       // Track the days attended (present)
       let totalPresents = totalDaysInMonth;
 
       // Loop through each day of the month to evaluate absences
       for (let day = 1; day <= totalDaysInMonth; day++) {
-        const currentDate = startDate.clone().add(day - 1, 'days');
-        const record = attendanceRecords.find(r => moment(r.date).isSame(currentDate, 'day'));
+        const currentDate = startDate.clone().add(day - 1, 'days').format('YYYY-MM-DD'); // Convert to string for comparison
+        const record = attendanceRecords.find(r => moment(r.date).format('YYYY-MM-DD') === currentDate);
 
-        if (record) {
-          // This day is marked as absent in the database
+        // Check if the current date is in the global absent dates array (from MessCut)
+        if (globalAbsentDates.includes(currentDate)) {
+          globalAbsences++;
           totalPresents--;  // Decrease present count
-          if (record.global) {
-            globalAbsences++;
-            if (absenceStreak >= 4) {
-              normalAbsences += absenceStreak;
-            }
-            absenceStreak = 0;  // Reset streak after global absence
-          } else {
-            // Continue the absence streak for normal absence
-            absenceStreak++;
+
+          // Treat global absences as part of the normal absence streak
+          if (consecutiveAbsenceDates.length > 0) {
+            consecutiveAbsenceDates.push(currentDate);
           }
+        } else if (record) {
+          // This day is marked as a normal absence in the database
+          totalPresents--;  // Decrease present count
+          consecutiveAbsenceDates.push(currentDate);  // Track consecutive absences
+          console.log(`Normal absence recorded for ${inmate.admissionNumber} on ${currentDate}`);
         } else {
-          // No record, this is a present day, finalize any ongoing streak
-          if (absenceStreak >= 4) {
-            normalAbsences += absenceStreak;  // Add streak to normal absences
+          // Present day: finalize any streak of absences
+          if (consecutiveAbsenceDates.length >= 4) {
+            normalAbsences += consecutiveAbsenceDates.length;  // Count the entire streak of absences
+            console.log(`Normal absence streak for ${inmate.admissionNumber}: ${consecutiveAbsenceDates.length} days`);
           }
-          absenceStreak = 0;  // Reset streak since it's a present day
+          consecutiveAbsenceDates = [];  // Reset streak
         }
       }
 
-      // Final check for remaining absence streak at the end of the month
-      if (absenceStreak >= 4) {
-        normalAbsences += absenceStreak;
+      // Final check for remaining streak of absences at the end of the month
+      if (consecutiveAbsenceDates.length >= 4) {
+        normalAbsences += consecutiveAbsenceDates.length;
+        console.log(`End of month streak for ${inmate.admissionNumber}: ${consecutiveAbsenceDates.length} days`);
       }
 
       totalAbsences = globalAbsences + normalAbsences;
+
+      // Calculate total presents: totalDaysInMonth - totalAbsences
+      totalPresents = totalDaysInMonth - totalAbsences;
 
       // Add the data to the report
       report.push({
@@ -142,3 +151,5 @@ exports.generateMonthlyReport = async (req, res) => {
     res.status(500).json({ message: 'Error generating monthly report', error: error.message });
   }
 };
+
+
