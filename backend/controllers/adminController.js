@@ -55,7 +55,7 @@ exports.generateMonthlyReport = async (req, res) => {
       return res.status(404).json({ message: 'No inmates found' });
     }
 
-    // Fetch all mess cuts that overlap with the current month
+    // Fetch all global mess cuts that overlap with the current month
     const messCuts = await MessCut.find({
       startDate: { $lte: endDate.toDate() },
       endDate: { $gte: startDate.toDate() }
@@ -88,6 +88,7 @@ exports.generateMonthlyReport = async (req, res) => {
       let globalAbsences = 0;
       let normalAbsences = 0;
       let consecutiveAbsenceDates = [];  // To store consecutive absence dates
+      let overlappingAbsences = 0;      // To store the count of overlapping absences
 
       // Track the days attended (present)
       let totalPresents = totalDaysInMonth;
@@ -98,25 +99,29 @@ exports.generateMonthlyReport = async (req, res) => {
         const record = attendanceRecords.find(r => moment(r.date).format('YYYY-MM-DD') === currentDate);
 
         // Check if the current date is in the global absent dates array (from MessCut)
-        if (globalAbsentDates.includes(currentDate)) {
+        const isGlobalAbsent = globalAbsentDates.includes(currentDate);
+        const isNormalAbsent = Boolean(record);
+
+        if (isGlobalAbsent) {
           globalAbsences++;
           totalPresents--;  // Decrease present count
+        }
 
-          // Treat global absences as part of the normal absence streak
-          if (consecutiveAbsenceDates.length > 0) {
-            consecutiveAbsenceDates.push(currentDate);
-          }
-        } else if (record) {
-          // This day is marked as a normal absence in the database
+        if (isNormalAbsent) {
           totalPresents--;  // Decrease present count
           consecutiveAbsenceDates.push(currentDate);  // Track consecutive absences
           console.log(`Normal absence recorded for ${inmate.admissionNumber} on ${currentDate}`);
-        } else {
-          // Present day: finalize any streak of absences
-          if (consecutiveAbsenceDates.length >= 4) {
-            normalAbsences += consecutiveAbsenceDates.length;  // Count the entire streak of absences
-            console.log(`Normal absence streak for ${inmate.admissionNumber}: ${consecutiveAbsenceDates.length} days`);
-          }
+        }
+
+        // If both normal and global absences occur on the same day, count it as overlapping
+        if (isGlobalAbsent && isNormalAbsent) {
+          overlappingAbsences++; // Track overlap
+          console.log(`Overlapping absence on ${currentDate} for ${inmate.admissionNumber}`);
+        }
+
+        // If it's a present day, finalize any streak of absences
+        if (!isNormalAbsent && consecutiveAbsenceDates.length >= 4) {
+          normalAbsences += consecutiveAbsenceDates.length;  // Count the entire streak of absences
           consecutiveAbsenceDates = [];  // Reset streak
         }
       }
@@ -124,10 +129,10 @@ exports.generateMonthlyReport = async (req, res) => {
       // Final check for remaining streak of absences at the end of the month
       if (consecutiveAbsenceDates.length >= 4) {
         normalAbsences += consecutiveAbsenceDates.length;
-        console.log(`End of month streak for ${inmate.admissionNumber}: ${consecutiveAbsenceDates.length} days`);
       }
 
-      totalAbsences = globalAbsences + normalAbsences;
+      // Calculate total absences by avoiding double counting the overlapping days
+      totalAbsences = globalAbsences + normalAbsences - overlappingAbsences;
 
       // Calculate total presents: totalDaysInMonth - totalAbsences
       totalPresents = totalDaysInMonth - totalAbsences;
@@ -151,5 +156,6 @@ exports.generateMonthlyReport = async (req, res) => {
     res.status(500).json({ message: 'Error generating monthly report', error: error.message });
   }
 };
+
 
 
