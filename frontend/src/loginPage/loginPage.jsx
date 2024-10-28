@@ -14,7 +14,7 @@ export default function LoginPage() {
     setError(null);  // Clear previous errors
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('https://messapp-ymg5.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -27,7 +27,7 @@ function GlobalMessCut() {
     try {
       const token = localStorage.getItem('adminToken'); // Retrieve the admin token
 
-      const response = await fetch('http://localhost:5000/api/admin/mark-global-attendance', {
+      const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/mark-global-attendance', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
