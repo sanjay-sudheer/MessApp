@@ -25,10 +25,13 @@ function GlobalMessCut() {
     setMessage('');
 
     try {
+      const token = localStorage.getItem('adminToken'); // Retrieve the admin token
+
       const response = await fetch('http://localhost:5000/api/admin/mark-global-attendance', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `${token}`, // Include the token in the Authorization header
         },
         body: JSON.stringify(requestData),
       });

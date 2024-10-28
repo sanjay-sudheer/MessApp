@@ -8,7 +8,6 @@ dotenv.config();
 // Login function
 exports.login = async (req, res) => {
   const { admissionNumber, roomNumber } = req.body;
-  console.log(req.body);
 
   try {
     // Find the user by admission number (username)

@@ -154,13 +154,13 @@ exports.generateMonthlyReport = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    
+
     // Check if the credentials match environment variables
-    if (username === process.env.USERNAME && password === process.env.PASSWORD) {
-      // Generate JWT token
+    if (username === process.env.USER_NAME && password === process.env.PASSWORD) {
+      // Generate JWT token with admin flag
       const token = jwt.sign(
-        { username }, // Payload with user information (can add more details if needed)
-        process.env.JWT_SECRET // Secret key from environment variables
+        { username, isAdmin: true }, // Payload includes admin claim
+        process.env.JWT_SECRET,
       );
 
       return res.status(200).json({ message: 'Login successful', token });
@@ -171,4 +171,3 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
-

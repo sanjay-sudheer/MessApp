@@ -10,7 +10,7 @@ export default function LoginPage() {
   const navigate = useNavigate();  // Initialize useNavigate
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     setError(null);  // Clear previous errors
 
     try {
@@ -33,6 +33,7 @@ export default function LoginPage() {
         setAdmissionNumber('');
 
         // Navigate to a new route after successful login
+        console.log('Navigating to user profile');
         navigate('/user-profile');  // Redirect to the dashboard or desired page
       } else {
         const errorData = await response.json();

@@ -129,6 +129,8 @@ export default function UserProfile() {
       const result = await response.json();
       console.log('Attendance marked successfully', result);
 
+      alert('Absent marked successfully!');
+
       updateAttendanceUI(fromDate, toDate);
       
       // Clear form after successful submission
@@ -169,13 +171,13 @@ export default function UserProfile() {
             <button onClick={logoutUser}>LogOut</button>
           </div>
         </div>
-        <div className="mainContentSection">
+        {/* <div className="mainContentSection">
           <span className='attendanceHeading'>Mess Attendance</span>
           <div className="attendanceGraph">
             <div className="loading" ref={messCutGraph}></div>
           </div>
           <span className='attendanceDescription'>{`${percentage}% attendance this month`}</span>
-        </div>
+        </div> */}
         <div className='MessCutformSection'>
           <form className="messCutReport" onSubmit={handleMessCut}>
             <label htmlFor="from">From:</label>

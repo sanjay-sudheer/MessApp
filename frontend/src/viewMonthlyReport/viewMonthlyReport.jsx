@@ -9,10 +9,13 @@ function ViewMonthlyReport() {
   useEffect(() => {
     const fetchMonthlyReport = async () => {
       try {
+        const token = localStorage.getItem('adminToken'); // Retrieve the admin token
+
         const response = await fetch('http://localhost:5000/api/admin/monthly-report', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${token}`, // Include the token in the Authorization header
           },
           body: JSON.stringify({
             month: 10,
