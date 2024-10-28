@@ -5,7 +5,7 @@ import AdminLoginPage from './adminLoginPage/adminLoginPage'; // Import Admin Lo
 import UserProfile from './userProfile/userProfile';
 import AdminPage from './admindashboard/admin';
 import GlobalMessCut from './globalMessCut/globalMessCut';
-import ViewMonthlyReport from './ViewMonthlyReport/viewMonthlyReport';
+import ViewMonthlyReport from './viewMonthlyReport/viewMonthlyReport';
 import AdminAdding from './AdminEditingFeatures/adminAdding/adminAdding';
 import AdminEditing from './AdminEditingFeatures/adminEditing/adminEditing';
 import AdminEditingOptions from './AdminEditing/adminEditingOptions';
