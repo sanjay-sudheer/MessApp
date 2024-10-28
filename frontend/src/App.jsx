@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./loginPage/loginPage";
 import UserProfile from './userProfile/userProfile';
 import AdminPage from './admindashboard/admin';
-import GlobalMessCut from './adminlogin/globalMessCut';
+import GlobalMessCut from './globalMessCut/globalMessCut';
 import ViewMonthlyReport from './ViewMonthlyReport/viewMonthlyReport';
 import AdminAdding from './AdminEditingFeatures/adminAdding/adminAdding';
 import AdminEditing from './AdminEditingFeatures/adminEditing/adminEditing';
