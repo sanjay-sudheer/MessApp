@@ -49,32 +49,30 @@ exports.generateMonthlyReport = async (req, res) => {
     const endDate = startDate.clone().endOf('month');
     const totalDaysInMonth = endDate.date();
 
-    // Fetch all inmates
-    const inmates = await Inmate.find();
+    // Fetch all inmates, sorted by year and room number
+    const inmates = await Inmate.find().sort({ year: 1, roomNumber: 1 });
     if (!inmates.length) {
       return res.status(404).json({ message: 'No inmates found' });
     }
 
-    // Fetch all global mess cuts that overlap with the current month
+    // Fetch all global mess cuts that overlap with the month
     const messCuts = await MessCut.find({
       startDate: { $lte: endDate.toDate() },
       endDate: { $gte: startDate.toDate() }
     });
 
-    // Convert messCuts into an array of dates for easy checking
-    const globalAbsentDates = [];
+    // Convert messCuts to an array of dates for easy checking
+    const globalAbsentDates = new Set();
     messCuts.forEach(messCut => {
       const cutStart = moment(messCut.startDate).startOf('day');
       const cutEnd = moment(messCut.endDate).endOf('day');
       for (let date = cutStart; date.isSameOrBefore(cutEnd); date.add(1, 'days')) {
-        globalAbsentDates.push(date.format('YYYY-MM-DD'));
+        globalAbsentDates.add(date.format('YYYY-MM-DD'));
       }
     });
 
-    // Initialize report data
     const report = [];
 
-    // Iterate through all inmates and compile attendance data
     for (const inmate of inmates) {
       const attendanceRecords = await Attendance.find({
         admissionNumber: inmate.admissionNumber,
@@ -87,60 +85,49 @@ exports.generateMonthlyReport = async (req, res) => {
       let totalAbsences = 0;
       let globalAbsences = 0;
       let normalAbsences = 0;
-      let consecutiveAbsenceDates = [];  // To store consecutive absence dates
-      let overlappingAbsences = 0;      // To store the count of overlapping absences
-
-      // Track the days attended (present)
+      let consecutiveAbsenceStreak = 0;
       let totalPresents = totalDaysInMonth;
 
-      // Loop through each day of the month to evaluate absences
+      // Process each day in the month
       for (let day = 1; day <= totalDaysInMonth; day++) {
-        const currentDate = startDate.clone().add(day - 1, 'days').format('YYYY-MM-DD'); // Convert to string for comparison
-        const record = attendanceRecords.find(r => moment(r.date).format('YYYY-MM-DD') === currentDate);
-
-        // Check if the current date is in the global absent dates array (from MessCut)
-        const isGlobalAbsent = globalAbsentDates.includes(currentDate);
-        const isNormalAbsent = Boolean(record);
+        const currentDate = startDate.clone().add(day - 1, 'days').format('YYYY-MM-DD');
+        const isGlobalAbsent = globalAbsentDates.has(currentDate);
+        const isNormalAbsent = attendanceRecords.some(record => moment(record.date).format('YYYY-MM-DD') === currentDate);
 
         if (isGlobalAbsent) {
           globalAbsences++;
-          totalPresents--;  // Decrease present count
+          totalPresents--; // Decrement present days only once for global absence
         }
 
-        if (isNormalAbsent) {
-          totalPresents--;  // Decrease present count
-          consecutiveAbsenceDates.push(currentDate);  // Track consecutive absences
-          console.log(`Normal absence recorded for ${inmate.admissionNumber} on ${currentDate}`);
-        }
-
-        // If both normal and global absences occur on the same day, count it as overlapping
-        if (isGlobalAbsent && isNormalAbsent) {
-          overlappingAbsences++; // Track overlap
-          console.log(`Overlapping absence on ${currentDate} for ${inmate.admissionNumber}`);
-        }
-
-        // If it's a present day, finalize any streak of absences
-        if (!isNormalAbsent && consecutiveAbsenceDates.length >= 4) {
-          normalAbsences += consecutiveAbsenceDates.length;  // Count the entire streak of absences
-          consecutiveAbsenceDates = [];  // Reset streak
+        if (isNormalAbsent && !isGlobalAbsent) {
+          totalPresents--; // Decrement present days only if it’s a unique normal absence
+          consecutiveAbsenceStreak++;
+        } else {
+          // If it's a present day, finalize any streak of absences
+          if (consecutiveAbsenceStreak >= 4) {
+            normalAbsences += consecutiveAbsenceStreak; // Only count streaks of 4+ as normal absence
+          }
+          consecutiveAbsenceStreak = 0; // Reset streak on a present day
         }
       }
 
-      // Final check for remaining streak of absences at the end of the month
-      if (consecutiveAbsenceDates.length >= 4) {
-        normalAbsences += consecutiveAbsenceDates.length;
+      // Final check if the month ends on a streak
+      if (consecutiveAbsenceStreak >= 4) {
+        normalAbsences += consecutiveAbsenceStreak;
       }
 
-      // Calculate total absences by avoiding double counting the overlapping days
-      totalAbsences = globalAbsences + normalAbsences - overlappingAbsences;
+      // Calculate total absences by avoiding double counting any overlapping absences
+      totalAbsences = globalAbsences + normalAbsences;
 
-      // Calculate total presents: totalDaysInMonth - totalAbsences
+      // Recalculate totalPresents after finalizing absences
       totalPresents = totalDaysInMonth - totalAbsences;
 
       // Add the data to the report
       report.push({
         admissionNumber: inmate.admissionNumber,
         name: inmate.name,
+        year: inmate.year,
+        roomNumber: inmate.roomNumber,
         totalPresents,
         totalAbsences,
         globalAbsences,
@@ -150,12 +137,13 @@ exports.generateMonthlyReport = async (req, res) => {
       });
     }
 
+    // Sort report by year first, then roomNumber
+    report.sort((a, b) => a.year - b.year );
+
     return res.status(200).json({ message: 'Monthly report generated successfully', report });
   } catch (error) {
     console.error('Error generating monthly report:', error);
     res.status(500).json({ message: 'Error generating monthly report', error: error.message });
   }
 };
-
-
 
