@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './loginPage/loginPage';
-import AdminLoginPage from './adminLoginPage/adminLoginPage'; // Import Admin Login component
+import AdminLoginPage from './adminLoginPage/AdminLoginPage'; // Import Admin Login component
 import UserProfile from './userProfile/userProfile';
 import AdminPage from './admindashboard/admin';
 import GlobalMessCut from './globalMessCut/globalMessCut';
