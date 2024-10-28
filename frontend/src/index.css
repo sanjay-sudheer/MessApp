@@ -7,3 +7,11 @@ body{
       margin: 0;
       background-color:var(--body-clr);
 }
+a{
+      text-decoration: none;
+      color: inherit;
+}
+li{
+      list-style: none;
+}
+

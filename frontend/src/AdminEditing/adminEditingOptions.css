@@ -1,0 +1,51 @@
+.outerDiv{
+      margin: 2rem;
+}
+.outerDiv img{
+      width: 4rem;
+      cursor: pointer;
+}
+.adminEditingheader{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 34px;
+      font-weight: 700;
+}
+.adminEditingheader img{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: white;
+}
+.userListDiv{
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+}
+.userDetail{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: .5rem;
+      border-radius: .5rem;
+      margin-top: 1.5rem;
+}
+.userNamePictureDiv{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+.userDetail .userProfilePic{
+      width: 5rem;
+}
+.editingIconSections{
+      display: flex;
+      padding-right:1rem;
+      gap: .5rem;
+}
+.editingIconSections img{
+      width: 3rem;
+}

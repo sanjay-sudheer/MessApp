@@ -38,9 +38,6 @@ export default function AdminPage() {
     <div className={`container ${theme}`}>
       <header className="header">
         <div className="brand">
-          <span role="img" aria-label="laptop" className="icon">
-            💻
-          </span>
           <span>Hostel Mess Admin</span>
         </div>
         <div className="search-bar">
@@ -89,7 +86,7 @@ export default function AdminPage() {
               <p>Manage mess cuts for all students</p>
             </div>
             <div className="card-content">
-              <Link to="/global-mess" className="full-button">💳 Manage Global Messcut</Link>
+              <Link to="/global-mess" className="full-button">Manage Global Messcut</Link>
             </div>
           </div>
           <div className="card">
@@ -98,7 +95,7 @@ export default function AdminPage() {
               <p>Generate and view monthly attendance reports</p>
             </div>
             <div className="card-content">
-              <Link to="/viewreport" className="full-button">👥 View Monthly Report</Link>
+              <Link to="/viewreport" className="full-button">View Monthly Report</Link>
             </div>
           </div>
           <div className="card">
@@ -107,7 +104,7 @@ export default function AdminPage() {
               <p>Add, edit, or remove user accounts</p>
             </div>
             <div className="card-content">
-              <Button className="full-button">👤 Manage Users</Button>
+              <Link to="/AdminEditing" className="full-button">Manage Users</Link>
             </div>
           </div>
         </div>
