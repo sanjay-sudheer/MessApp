@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div className="headerSection">
           <span className="loginTitle">mess attendance login</span>
           <span className='loginDescription'>
-            Enter your room number and preset password
+            Enter your admission number and room number
           </span>
         </div>
         <form className='formSection' onSubmit={handleSubmit}>
