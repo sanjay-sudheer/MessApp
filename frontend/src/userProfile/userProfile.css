@@ -1,120 +1,88 @@
-/*header styles starts*/
+/* Header styles starts */
 .userProfile {
       background-color: white;
       border: none;
       border-radius: 1rem;
       padding: 2rem;
       width: 25rem;
-      max-width: 100%; /* Added to prevent overflow on mobile */
-}
-
-.userheader {
+      margin: 0 auto; /* Center the profile on larger screens */
+    }
+    
+    .userheader {
       display: flex;
       justify-content: flex-start;
       align-items: center;
       padding-bottom: 1rem;
       position: relative;
-      flex-wrap: wrap; /* Added for better mobile layout */
-      gap: 1rem; /* Added spacing between wrapped items */
-}
-
-.userDescription {
+    }
+    
+    .userDescription {
       text-transform: uppercase;
       opacity: .6;
-}
-
-.profileIcon img {
+    }
+    
+    .profileIcon img {
       margin-left: -7px;
       width: 5rem;
-}
-
-.logoutButton {
+    }
+    
+    .logoutButton {
       position: absolute;
       right: 0;
-}
-
-.logoutButton button {
+    }
+    
+    .logoutButton button {
       background-color: transparent;
       border: 1px groove grey;
       border-radius: .5rem;
       padding-inline: 1rem;
       padding-block: .5rem;
       font-weight: 600;
-      cursor: pointer;
-}
-
-/* Media query for mobile devices */
-@media screen and (max-width: 480px) {
-      .userProfile {
-            padding: 1rem;
-            width: 100%;
-      }
-
-      .userheader {
-            justify-content: center;
-            text-align: center;
-      }
-
-      .logoutButton {
-            position: static;
-            width: 100%;
-            margin-top: 1rem;
-      }
-
-      .logoutButton button {
-            width: 100%;
-      }
-
-      .profileIcon img {
-            margin-left: 0;
-      }
-}
-
-/*header styles ends*/
-
-.attendanceHeading {
+    }
+    
+    /* Header styles ends */
+    
+    .attendanceHeading {
       font-weight: 700;
       font-size: 16px;
-}
-
-.attendanceGraph {
+    }
+    
+    .attendanceGraph {
       width: 100%;
       height: .5rem;
       border: 1px groove grey;
       border-radius: 1rem;
       background-color: transparent;
       margin-block: 10px;
-}
-
-.loading {
+    }
+    
+    .loading {
       width: inherit;
       height: inherit;
       border-radius: inherit;
       background-color: black;
       transition: all .5s linear;
-}
-
-.attendanceDescription {
+    }
+    
+    .attendanceDescription {
       opacity: .7;
       font-size: 13px;
-}
-
-.MessCutformSection input {
+    }
+    
+    .MessCutformSection input {
       margin-block: 2rem;
       padding: 1rem;
       border: 1px groove;
       border-radius: .5rem;
-      width: 100%; /* Added for better mobile experience */
-      box-sizing: border-box; /* Added to include padding in width calculation */
-}
-
-.messCutReport {
+    }
+    
+    .messCutReport {
       display: flex;
       flex-direction: column;
       padding-top: 2.5rem;
-}
-
-.messCutReport button {
+    }
+    
+    .messCutReport button {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -125,9 +93,46 @@
       padding: .7rem;
       border-radius: .5rem;
       cursor: pointer;
-      text-transform: uppercase;
-}
-
-.messCutReport button:hover {
+      text-transform: uppercase; 
+    }
+    
+    .messCutReport button:hover {
       background-color: rgb(12, 12, 12);
-}
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .userProfile {
+        width: 90%; /* Use 90% width on smaller screens */
+        padding: 1rem; /* Reduced padding for smaller screens */
+        margin: 1rem auto; /* Add side margins for phones */
+      }
+    
+      .userheader {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the start */
+      }
+    
+      .logoutButton {
+        position: static; /* Reset position for mobile */
+        margin-top: 1rem; /* Add some space above the logout button */
+        align-self: flex-end; /* Align logout button to the end */
+      }
+    
+      .attendanceHeading {
+        font-size: 14px; /* Slightly smaller font size */
+      }
+    
+      .attendanceDescription {
+        font-size: 12px; /* Slightly smaller font size */
+      }
+    
+      .MessCutformSection input {
+        margin-block: 1rem; /* Reduce margin for inputs */
+      }
+    
+      .messCutReport button {
+        padding: .5rem; /* Adjust button padding for mobile */
+      }
+    }
+    
