@@ -16,12 +16,12 @@ export default function UserProfile() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const storedUserDetails = localStorage.getItem('inmate');
-    
+
     if (!token) {
       navigate('/login');
       return;
     }
-    
+
     if (storedUserDetails) {
       try {
         const parsedDetails = JSON.parse(storedUserDetails);
@@ -95,7 +95,7 @@ export default function UserProfile() {
     try {
       const token = localStorage.getItem('token');
       const admissionNumber = userDetails?.admissionNumber;
-      
+
       if (!token || !admissionNumber) {
         handleAuthError();
         return;
@@ -132,7 +132,7 @@ export default function UserProfile() {
       alert('Absent marked successfully!');
 
       updateAttendanceUI(fromDate, toDate);
-      
+
       // Clear form after successful submission
       setFromDate('');
       setToDate('');
@@ -159,13 +159,15 @@ export default function UserProfile() {
     <div className='mainOuter'>
       <div className="userProfile">
         <div className="userheader">
-          <div className="profileIcon">
-           
-          </div>
-          <div className="userNameDescription">
-            <span className='userName'>{userDetails.name}</span>
-            <br />
-            <span className='userDescription'>Men's Hostel</span>
+          <div className="userInfo">
+            <div className="profileIcon">
+              {/* Your profile icon here */}
+            </div>
+            <div className="userNameDescription">
+              <span className='userName'>{userDetails.name}</span>
+              <br />
+              <span className='userDescription'>Men's Hostel</span>
+            </div>
           </div>
           <div className="logoutButton">
             <button onClick={logoutUser}>LogOut</button>
@@ -198,8 +200,8 @@ export default function UserProfile() {
               onChange={(e) => setToDate(e.target.value)}
               required
             />
-            <button 
-              type='submit' 
+            <button
+              type='submit'
               disabled={isLoading}
             >
               {isLoading ? 'Submitting...' : 'Submit'}
