@@ -54,14 +54,14 @@ export default function LoginPage() {
       <div className="loginPage">
         <div className="headerSection">
           <span className="loginTitle">mess attendance login</span>
-          <span className='loginDescription'>
+          <span className='userLoginPage-loginDescription'>
             Enter your admission number and room number
           </span>
         </div>
         <form className='formSection' onSubmit={handleSubmit}>
           {error && <div className="errorMessage">{error}</div>} {/* Error message display */}
           <div className="inputSection">
-            <label htmlFor='AdmissionNumber'>Admission Number</label>
+            <label htmlFor='AdmissionNumber'>Admission Number (eg: 11111-22)</label>
             <input
               type="text"
               id="AdmissionNumber"

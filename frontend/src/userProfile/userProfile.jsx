@@ -157,19 +157,19 @@ export default function UserProfile() {
 
   return (
     <div className='mainOuter'>
-      <div className="userProfile">
-        <div className="userheader">
-          <div className="userInfo">
-            <div className="profileIcon">
+      <div className="user-userProfile">
+        <div className="user-userheader">
+          <div className="user-userInfo">
+            <div className="user-profileIcon">
               {/* Your profile icon here */}
             </div>
-            <div className="userNameDescription">
-              <span className='userName'>{userDetails.name}</span>
+            <div className="user-userNameDescription">
+              <span className='user-userName'>{userDetails.name}</span>
               <br />
-              <span className='userDescription'>Men's Hostel</span>
+              <span className='user-userDescription'>Men's Hostel</span>
             </div>
           </div>
-          <div className="logoutButton">
+          <div className="user-logoutButton">
             <button onClick={logoutUser}>LogOut</button>
           </div>
         </div>
@@ -180,8 +180,9 @@ export default function UserProfile() {
           </div>
           <span className='attendanceDescription'>{`${percentage}% attendance this month`}</span>
         </div> */}
-        <div className='MessCutformSection'>
-          <form className="messCutReport" onSubmit={handleMessCut}>
+        <div className='user-MessCutformSection'>
+          <span style={{textTransform:"uppercase",fontWeight:"600",fontSize:"14px",opacity:".8"}}>mark your absent dates</span>
+          <form className="user-messCutReport" onSubmit={handleMessCut}>
             <label htmlFor="from">From:</label>
             <input
               type="date"

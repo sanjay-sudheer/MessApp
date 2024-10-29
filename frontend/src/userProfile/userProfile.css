@@ -1,5 +1,5 @@
 /* Header styles starts */
-.userProfile {
+.user-userProfile {
       background-color: white;
       border: none;
       border-radius: 1rem;
@@ -8,7 +8,7 @@
       margin: 0 auto; /* Center the profile on larger screens */
     }
     
-    .userheader {
+    .user-userheader {
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -16,22 +16,22 @@
       position: relative;
     }
     
-    .userDescription {
+    .user-userDescription {
       text-transform: uppercase;
       opacity: .6;
     }
     
-    .profileIcon img {
+    .user-profileIcon img {
       margin-left: -7px;
       width: 5rem;
     }
     
-    .logoutButton {
+    .user-logoutButton {
       position: absolute;
       right: 0;
     }
     
-    .logoutButton button {
+    .user-logoutButton button {
       background-color: transparent;
       border: 1px groove grey;
       border-radius: .5rem;
@@ -42,12 +42,12 @@
     
     /* Header styles ends */
     
-    .attendanceHeading {
+    .user-attendanceHeading {
       font-weight: 700;
       font-size: 16px;
     }
     
-    .attendanceGraph {
+    .user-attendanceGraph {
       width: 100%;
       height: .5rem;
       border: 1px groove grey;
@@ -56,7 +56,7 @@
       margin-block: 10px;
     }
     
-    .loading {
+    .user-loading {
       width: inherit;
       height: inherit;
       border-radius: inherit;
@@ -69,20 +69,20 @@
       font-size: 13px;
     }
     
-    .MessCutformSection input {
+    .user-MessCutformSection input {
       margin-block: 2rem;
       padding: 1rem;
       border: 1px groove;
       border-radius: .5rem;
     }
     
-    .messCutReport {
+    .user-messCutReport {
       display: flex;
       flex-direction: column;
-      padding-top: 2.5rem;
+      padding-top: 2rem;
     }
     
-    .messCutReport button {
+    .user-messCutReport button {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -96,43 +96,24 @@
       text-transform: uppercase; 
     }
     
-    .messCutReport button:hover {
+    .user-messCutReport button:hover {
       background-color: rgb(12, 12, 12);
     }
     
     /* Responsive styles */
-    @media (max-width: 768px) {
-      .userProfile {
-        width: 90%; /* Use 90% width on smaller screens */
-        padding: 1rem; /* Reduced padding for smaller screens */
-        margin: 1rem auto; /* Add side margins for phones */
+    @media (max-width:488px) {
+      .user-userProfile{
+        width: 20rem;
       }
-    
-      .userheader {
-        flex-direction: column; /* Stack elements vertically */
-        align-items: flex-start; /* Align items to the start */
+      .user-userDescription{
+        font-size: 13px;
       }
-    
-      .logoutButton {
-        position: static; /* Reset position for mobile */
-        margin-top: 1rem; /* Add some space above the logout button */
-        align-self: flex-end; /* Align logout button to the end */
-      }
-    
-      .attendanceHeading {
-        font-size: 14px; /* Slightly smaller font size */
-      }
-    
-      .attendanceDescription {
-        font-size: 12px; /* Slightly smaller font size */
-      }
-    
-      .MessCutformSection input {
-        margin-block: 1rem; /* Reduce margin for inputs */
-      }
-    
-      .messCutReport button {
-        padding: .5rem; /* Adjust button padding for mobile */
+      .user-userProfile label{
+        font-size: 14px;
       }
     }
-    
+    @media (max-width:411px) {
+      .user-userProfile{
+        width: 16rem;
+      }
+    }
