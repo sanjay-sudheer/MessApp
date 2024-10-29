@@ -19,7 +19,7 @@ function ViewMonthlyReport() {
 
     const fetchMonthlyReport = async () => {
       try {
-        const response = await fetch('https://messapp-ymg5.onrender.com/admin/monthly-report', {
+        const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/monthly-report', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
