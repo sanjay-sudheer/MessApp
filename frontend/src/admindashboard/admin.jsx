@@ -1,7 +1,8 @@
 // Component.js
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import './admin.css';
+
 // Basic button component
 function Button({ children, onClick, className }) {
   return (
@@ -27,6 +28,15 @@ function DropdownMenu({ children }) {
 // Main Admin Page
 export default function AdminPage() {
   const [theme, setTheme] = useState("light");
+  const navigate = useNavigate();
+
+  // Check for admin token
+  useEffect(() => {
+    const adminToken = localStorage.getItem("adminToken"); // Adjust storage as needed
+    if (!adminToken) {
+      navigate("/admin-login"); // Redirect to login if token is absent
+    }
+  }, [navigate]);
 
   // Toggle theme between light and dark
   const toggleTheme = (selectedTheme) => {

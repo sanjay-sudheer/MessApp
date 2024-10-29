@@ -11,13 +11,6 @@ import AdminEditing from './AdminEditingFeatures/adminEditing/adminEditing';
 import AdminEditingOptions from './AdminEditing/adminEditingOptions';
 
 export default function App() {
-  const isUserAuthenticated = !!localStorage.getItem('token'); // Check user token
-  const isAdminAuthenticated = !!localStorage.getItem('adminToken'); // Check admin token
-
-  const ProtectedRoute = ({ element, isAuthenticated }) => {
-    return isAuthenticated ? element : <Navigate to="/" />;
-  };
-
   return (
     <BrowserRouter>
       <Routes>
@@ -34,27 +27,27 @@ export default function App() {
         {/* Protected Routes for Admin */}
         <Route 
           path="/admin" 
-          element={<ProtectedRoute element={<AdminPage />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<AdminPage />} 
         />
         <Route 
           path="/global-mess" 
-          element={<ProtectedRoute element={<GlobalMessCut />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<GlobalMessCut />} 
         />
         <Route 
           path="/viewreport" 
-          element={<ProtectedRoute element={<ViewMonthlyReport />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<ViewMonthlyReport />} 
         />
         <Route 
           path="/AdminAddingSection" 
-          element={<ProtectedRoute element={<AdminAdding />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<AdminAdding />} 
         />
         <Route 
           path="/AdminEditSection" 
-          element={<ProtectedRoute element={<AdminEditing />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<AdminEditing />} 
         />
         <Route 
           path="/AdminEditing" 
-          element={<ProtectedRoute element={<AdminEditingOptions />} isAuthenticated={isAdminAuthenticated} />} 
+          element={<AdminEditingOptions />} 
         />
 
         {/* Redirect unknown routes to login */}

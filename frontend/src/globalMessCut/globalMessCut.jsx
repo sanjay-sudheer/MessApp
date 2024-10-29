@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./globalMessCut.css";
 import userProfilePic from "../assests/user-profile-icon-removebg-preview.png";
 
@@ -7,6 +8,15 @@ function GlobalMessCut() {
   const [toDate, setToDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      // Redirect to login page if token is not found
+      navigate('/admin-login');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

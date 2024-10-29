@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import './viewMonthlyReport.css'; // Add this line for CSS
+import { useNavigate } from 'react-router-dom';
+import './viewMonthlyReport.css';
 
 function ViewMonthlyReport() {
-  const [reportData, setReportData] = useState([]); // Store the report data
-  const [loading, setLoading] = useState(true); // Manage loading state
-  const [error, setError] = useState(null); // Manage error state
+  const [reportData, setReportData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    
+    // Redirect if token is missing
+    if (!token) {
+      navigate('/admin-login');
+      return;
+    }
+
     const fetchMonthlyReport = async () => {
       try {
-        const token = localStorage.getItem('adminToken'); // Retrieve the admin token
-
         const response = await fetch('https://messapp-ymg5.onrender.com/admin/monthly-report', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${token}`, // Include the token in the Authorization header
+            'Authorization': `${token}`, // Add 'Bearer' prefix for security
           },
           body: JSON.stringify({
             month: 10,
@@ -28,16 +36,16 @@ function ViewMonthlyReport() {
         }
 
         const data = await response.json();
-        setReportData(data.report); // Use the report array from the response
-        setLoading(false); // Data is loaded
+        setReportData(data.report);
+        setLoading(false);
       } catch (err) {
-        setError(err.message); // Capture any error
-        setLoading(false); // Loading is done
+        setError(err.message);
+        setLoading(false);
       }
     };
 
     fetchMonthlyReport();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
