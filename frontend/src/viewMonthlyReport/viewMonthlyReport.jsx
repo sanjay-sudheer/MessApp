@@ -4,61 +4,89 @@ import './viewMonthlyReport.css';
 
 function ViewMonthlyReport() {
   const [reportData, setReportData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchMonthlyReport = async () => {
+    setLoading(true);
+    setError(null);
+
     const token = localStorage.getItem('adminToken');
-    
-    // Redirect if token is missing
     if (!token) {
       navigate('/admin-login');
       return;
     }
 
-    const fetchMonthlyReport = async () => {
-      try {
-        const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/monthly-report', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${token}`, // Add 'Bearer' prefix for security
-          },
-          body: JSON.stringify({
-            month: 10,
-            year: 2024,
-          }),
-        });
+    try {
+      const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/monthly-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`, // 'Bearer' prefix for the token
+        },
+        body: JSON.stringify({ month: parseInt(month), year: parseInt(year) }),
+      });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch the monthly report');
-        }
-
-        const data = await response.json();
-        setReportData(data.report);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the monthly report');
       }
-    };
 
-    fetchMonthlyReport();
-  }, [navigate]);
+      const data = await response.json();
+      setReportData(data.report);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (month && year) {
+      fetchMonthlyReport();
+    } else {
+      setError('Please enter both month and year');
+    }
+  };
 
   return (
     <div className="report-container">
-      <h1>Monthly Report for October 2024</h1>
-      {reportData.length > 0 ? (
+      <h1>Monthly Report</h1>
+      <form onSubmit={handleSubmit} className="date-selection-form">
+        <label>
+          Month:
+          <input
+            type="number"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            placeholder="Enter month (1-12)"
+            min="1"
+            max="12"
+            required
+          />
+        </label>
+        <label>
+          Year:
+          <input
+            type="number"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            placeholder="Enter year"
+            min="2000"
+            required
+          />
+        </label>
+        <button type="submit">Fetch Report</button>
+      </form>
+
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : reportData.length > 0 ? (
         <table className="report-table">
           <thead>
             <tr>

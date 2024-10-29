@@ -171,3 +171,25 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
+
+exports.deleteWholeMonthAttendance = async (req, res) => {
+  try {
+    const { month } = req.body;
+
+    // Validate month
+    if (!month || month < 1 || month > 12) {
+      return res.status(400).json({ message: 'Invalid month provided' });
+    }
+
+    // Delete attendance records for the specified month
+    const result = await Attendance.deleteMany({ month });
+
+    return res.status(200).json({
+      message: `Attendance records for month ${month} deleted successfully.`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.error('Error deleting monthly attendance:', error);
+    res.status(500).json({ message: 'Error deleting attendance records for the specified month.', error: error.message });
+  }
+};

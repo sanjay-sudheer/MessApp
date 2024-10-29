@@ -10,5 +10,6 @@ const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');  // I
 router.post('/mark-global-attendance',adminAuthMiddleware,adminController.markGlobalAttendance);  // Use JWT middleware
 router.post('/monthly-report',adminAuthMiddleware,adminController.generateMonthlyReport);  // Use JWT middleware
 router.post('/login',adminController.login);  
+router.post('/delete-month',adminAuthMiddleware,adminController.deleteWholeMonthAttendance);  
 
 module.exports = router;
