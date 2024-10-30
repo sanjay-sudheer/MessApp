@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './loginPage.css';
 
 export default function LoginPage() {
@@ -7,11 +7,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    setError(null);  // Clear previous errors
+    e.preventDefault();
+    setError(null); // Clear previous errors
 
     try {
       const response = await fetch('https://messapp-ymg5.onrender.com/api/auth/login', {
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
         // Navigate to a new route after successful login
         console.log('Navigating to user profile');
-        navigate('/user-profile');  // Redirect to the dashboard or desired page
+        navigate('/user-profile'); // Redirect to the dashboard or desired page
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Login failed');
@@ -45,9 +45,15 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem('token'));
-    console.log(JSON.parse(localStorage.getItem('inmate'))); // Log inmate data from local storage
-  }, []);
+    const token = localStorage.getItem('token');
+    if (token) {
+      // If token is present, redirect to /user-profile
+      console.log('Token found, redirecting to user profile');
+      navigate('/user-profile');
+    } else {
+      console.log('No token found');
+    }
+  }, [navigate]); // Include navigate in the dependency array
 
   return (
     <div className='mainOuter'>
