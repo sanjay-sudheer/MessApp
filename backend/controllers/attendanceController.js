@@ -2,6 +2,8 @@
 
 const moment = require('moment-timezone');
 const Attendance = require('../models/attendanceModel');
+const MessCut = require('../models/messCutModel');
+const Inmate = require('../models/inmateModel');
 
 exports.markAttendanceByDateRange = async (req, res) => {
   try {
@@ -54,3 +56,53 @@ exports.markAttendanceByDateRange = async (req, res) => {
     res.status(500).json({ message: 'Error processing attendance', error });
   }
 };
+
+exports.getAttendanceByMonth = async (req, res) => {
+  try {
+    const { admissionNumber, month, year } = req.body;
+
+    // Validate month and year
+    if (!month || !year || month < 1 || month > 12 || year < 2000 || year > new Date().getFullYear()) {
+      return res.status(400).json({ message: 'Invalid month or year provided' });
+    }
+
+    // Calculate the start and end dates of the month
+    const startDate = moment.tz(`${year}-${month.toString().padStart(2, '0')}-01`, 'YYYY-MM-DD', 'Asia/Kolkata').startOf('month');
+    const endDate = startDate.clone().endOf('month');
+
+    // Fetch attendance records for the given month
+    const attendance = await Attendance.find({
+      admissionNumber,
+      date: { $gte: startDate.toDate(), $lte: endDate.toDate() }
+    });
+
+    // Extract the absent dates from attendance records
+    const absentDates = attendance.map(record => moment(record.date).format('YYYY-MM-DD'));
+
+    // Fetch global mess cut dates within the same month
+    const messCuts = await MessCut.find({
+      startDate: { $lte: endDate.toDate() },
+      endDate: { $gte: startDate.toDate() }
+    });
+
+    // Extract and add mess cut dates to the absentDates array
+    messCuts.forEach(messCut => {
+      const cutStart = moment(messCut.startDate).startOf('day');
+      const cutEnd = moment(messCut.endDate).endOf('day');
+      for (let date = cutStart; date.isSameOrBefore(cutEnd); date.add(1, 'days')) {
+        const formattedDate = date.format('YYYY-MM-DD');
+        if (!absentDates.includes(formattedDate)) {
+          absentDates.push(formattedDate); // Include unique mess cut dates only
+        }
+      }
+    });
+
+    return res.status(200).json({
+      attendance,
+      absentDates: absentDates.sort() // Sort dates in ascending order
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching attendance records', error });
+  }
+};
+

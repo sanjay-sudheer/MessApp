@@ -89,11 +89,10 @@ exports.generateMonthlyReport = async (req, res) => {
       let totalAbsences = 0;
       let globalAbsences = 0;
       let normalAbsences = 0;
+      let consecutiveAbsenceStreak = 0;
       let totalPresents = totalDaysInMonth;
 
-      // Track streaks
-      let currentStreak = 0; // To track the current streak of normal absences
-      let hasGlobalAbsence = false; // To track if the current streak has a global absence
+      const normalAbsentDates = new Set();
 
       // Process each day in the month
       for (let day = 1; day <= totalDaysInMonth; day++) {
@@ -103,47 +102,34 @@ exports.generateMonthlyReport = async (req, res) => {
 
         if (isGlobalAbsent) {
           globalAbsences++;
-          totalPresents--; // Decrement present days for global absence
-          hasGlobalAbsence = true; // Set flag for global absence
-          
-          // Finalize the current normal absence streak
-          if (currentStreak > 0) {
-            if (currentStreak < 4) {
-              // Only count normal absences if it's less than 4
-              normalAbsences += currentStreak; // Count the normal absence streak
-            }
-            // Reset current streak
-            currentStreak = 0;
-          }
+          totalPresents--; // Decrement present days only once for global absence
+          consecutiveAbsenceStreak++; // Increment streak for global absences
         } else if (isNormalAbsent) {
-          totalPresents--; // Decrement present days for normal absence
-          currentStreak++; // Increment current normal absence streak
+          totalPresents--; // Decrement present days only if it's a unique normal absence
+          consecutiveAbsenceStreak++;
+          normalAbsentDates.add(currentDate);
         } else {
-          // Finalize the streak on a present day
-          if (currentStreak >= 4) {
-            normalAbsences += currentStreak; // Count all normal absences if streak is 4 or more
-          } else if (currentStreak > 0) {
-            // Only add the normal absence count if less than 4
-            normalAbsences += currentStreak; // Count the normal absence streak
+          // If it's a present day, finalize any streak of absences
+          if (consecutiveAbsenceStreak >= 4) {
+            const actualNormalAbsenceCount = consecutiveAbsenceStreak - globalAbsences; // Calculate actual normal absence count
+            normalAbsences += actualNormalAbsenceCount > 0 ? actualNormalAbsenceCount : 0; // Only add if it's above 0
+            consecutiveAbsenceStreak = 0; // Reset streak on a present day
+            globalAbsences = 0; // Reset global absences within the streak
+          } else {
+            consecutiveAbsenceStreak = 0; // Reset streak on a present day
+            globalAbsences = 0; // Reset global absences within the streak
           }
-          // Reset streak on a present day
-          currentStreak = 0; 
-          hasGlobalAbsence = false; // Reset flag for global absence
         }
       }
 
-      // Final check at the end of the month
-      if (currentStreak > 0) {
-        if (currentStreak >= 4) {
-          normalAbsences += currentStreak; // Count all normal absences if streak is 4 or more
-        } else if (currentStreak < 4 && !hasGlobalAbsence) {
-          // Count only if there was no global absence
-          normalAbsences += currentStreak; // Count the normal absence streak
-        }
+      // Final check if the month ends on a streak
+      if (consecutiveAbsenceStreak >= 4) {
+        const actualNormalAbsenceCount = consecutiveAbsenceStreak - globalAbsences;
+        normalAbsences += actualNormalAbsenceCount > 0 ? actualNormalAbsenceCount : 0;
       }
 
-      // Calculate total absences by adding normal and global absences
-      totalAbsences = globalAbsences + normalAbsences;
+      // Global absences are assigned to everyone
+      totalAbsences = globalAbsentDates.size + normalAbsences;
 
       // Recalculate totalPresents after finalizing absences
       totalPresents = totalDaysInMonth - totalAbsences;
@@ -156,7 +142,7 @@ exports.generateMonthlyReport = async (req, res) => {
         roomNumber: inmate.roomNumber,
         totalPresents,
         totalAbsences,
-        globalAbsences,
+        globalAbsences: globalAbsentDates.size, // Ensure each inmate receives the global absence count
         normalAbsences,
         month: parseInt(month),
         year: parseInt(year)

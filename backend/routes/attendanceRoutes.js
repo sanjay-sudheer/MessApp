@@ -8,5 +8,6 @@ const authMiddleware = require('../middlewares/authMiddleware');  // Import the 
 // Route to mark attendance by date range
 // POST /api/attendance/mark
 router.post('/mark', authMiddleware, attendanceController.markAttendanceByDateRange);  // Use JWT middleware
+router.post('/absent-dates', authMiddleware, attendanceController.getAttendanceByMonth);  // Use JWT middleware
 
 module.exports = router;
