@@ -25,7 +25,6 @@ export default function AdminLoginPage() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('adminToken', data.token);
-        console.log('JWT Token:', data.token);
 
         setUsername('');
         setPassword('');

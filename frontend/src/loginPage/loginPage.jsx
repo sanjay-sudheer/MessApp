@@ -26,8 +26,6 @@ export default function LoginPage() {
         const data = await response.json();
         localStorage.setItem('token', data.token); // Store token in local storage
         localStorage.setItem('inmate', JSON.stringify(data.inmate)); // Store inmate data in local storage
-        console.log('JWT Token:', data.token); // Log the token in the console
-        console.log('Inmate Data:', data.inmate); // Log inmate data in the console
 
         setPassword('');
         setAdmissionNumber('');
