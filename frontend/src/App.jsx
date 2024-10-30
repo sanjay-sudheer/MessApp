@@ -9,6 +9,7 @@ import ViewMonthlyReport from './viewMonthlyReport/viewMonthlyReport';
 import AdminAdding from './AdminEditingFeatures/adminAdding/adminAdding';
 import AdminEditing from './AdminEditingFeatures/adminEditing/adminEditing';
 import AdminEditingOptions from './AdminEditing/adminEditingOptions';
+import PrevMesscut from './viewPrevMessCut/prevMessCut';
 
 export default function App() {
   return (
@@ -48,6 +49,10 @@ export default function App() {
         <Route 
           path="/AdminEditing" 
           element={<AdminEditingOptions />} 
+        />
+        <Route 
+          path="/prevmesscut" 
+          element={<PrevMesscut />} 
         />
 
         {/* Redirect unknown routes to login */}
