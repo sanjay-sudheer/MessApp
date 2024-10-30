@@ -81,6 +81,7 @@ const PrevMessCut = () => {
                   onChange={(e) => setMonth(e.target.value)}
                   />
             </div>
+            {/* <button onClick={fetchAbsentDates}>Fetch Attendance</button> */}
             {error && <p>{error}</p>}
             <div className="calendar">
                 {renderCalendar()}
