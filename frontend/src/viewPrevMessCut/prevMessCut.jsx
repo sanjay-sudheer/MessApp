@@ -112,7 +112,6 @@ const PrevMessCut = () => {
                     onChange={(e) => setMonth(e.target.value)}
                 />
             </div>
-            {error && <p>{error}</p>}
             <div className="calendar">
                 {renderCalendar()}
             </div>
