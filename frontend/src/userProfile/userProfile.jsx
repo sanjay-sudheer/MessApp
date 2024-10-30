@@ -76,7 +76,7 @@ export default function UserProfile() {
     alert('Your session has expired. Please log in again.');
     localStorage.removeItem('token');
     localStorage.removeItem('inmate');
-    navigate('/login');
+    navigate('/'); // Redirect to root path
   };
 
   const changeAttendance = async () => {
@@ -170,18 +170,11 @@ export default function UserProfile() {
             </div>
           </div>
           <div className="user-logoutButton">
-            <button onClick={logoutUser}>LogOut</button>
+            <button onClick={logoutUser}>Logout</button>
           </div>
         </div>
-        {/* <div className="mainContentSection">
-          <span className='attendanceHeading'>Mess Attendance</span>
-          <div className="attendanceGraph">
-            <div className="loading" ref={messCutGraph}></div>
-          </div>
-          <span className='attendanceDescription'>{`${percentage}% attendance this month`}</span>
-        </div> */}
         <div className='user-MessCutformSection'>
-          <span style={{textTransform:"uppercase",fontWeight:"600",fontSize:"14px",opacity:".8"}}>mark your absent dates</span>
+          <span style={{ textTransform: "uppercase", fontWeight: "600", fontSize: "14px", opacity: ".8" }}>Mark your absent dates</span>
           <form className="user-messCutReport" onSubmit={handleMessCut}>
             <label htmlFor="from">From:</label>
             <input
