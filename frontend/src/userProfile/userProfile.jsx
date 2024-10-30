@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './userProfile.css';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import PrevMessCut from '../viewPrevMessCut/prevMessCut'
 
 export default function UserProfile() {
   const [fromDate, setFromDate] = useState('');
@@ -170,11 +172,12 @@ export default function UserProfile() {
             </div>
           </div>
           <div className="user-logoutButton">
-            <button onClick={logoutUser}>Logout</button>
+            <button onClick={logoutUser} className='logoutButton'>Logout</button>
+            <Link to='/prevmesscut'><button className='viewPrevMessCutIcon' title='view previous mess cut'>View MessCuts</button></Link>
           </div>
         </div>
         <div className='user-MessCutformSection'>
-          <span style={{ textTransform: "uppercase", fontWeight: "600", fontSize: "14px", opacity: ".8" }}>Mark your absent dates</span>
+          <span style={{ textTransform: "uppercase", fontWeight: "600", fontSize: "14px", opacity: ".8" }} className='requiredDescription'>Mark your absent dates</span>
           <form className="user-messCutReport" onSubmit={handleMessCut}>
             <label htmlFor="from">From:</label>
             <input

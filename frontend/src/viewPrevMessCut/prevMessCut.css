@@ -2,7 +2,7 @@
       width: 25rem;
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
+      gap: 8px;
       background-color: white;
       padding: 2rem;
       border-radius: 1rem;
@@ -12,8 +12,8 @@
       text-align: center;
   }
   .day{
-      width: 2rem;
-      height: 2rem;
+      width: 1.5rem;
+      height: 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -24,6 +24,8 @@
       background-color: red;
       color:white;
       border-radius: 10rem;
+      font-weight: 600;
+      border: 2px solid black;
   }
   .blank {
       visibility: hidden;

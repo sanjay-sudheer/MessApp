@@ -98,8 +98,13 @@
     
     .user-messCutReport button:hover {
       background-color: rgb(12, 12, 12);
+    } 
+    .user-logoutButton{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .5rem; 
     }
-    
     /* Responsive styles */
     @media (max-width:488px) {
       .user-userProfile{
@@ -111,9 +116,23 @@
       .user-userProfile label{
         font-size: 14px;
       }
+      .user-logoutButton{
+        display: flex;
+        flex-direction: column;
+      }
+      .user-logoutButton button{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 25px;
+      }
     }
     @media (max-width:411px) {
       .user-userProfile{
         width: 16rem;
+      }
+      .requiredDescription{
+        font-size: 12px !important;
       }
     }
