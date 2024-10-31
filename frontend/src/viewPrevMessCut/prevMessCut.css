@@ -68,8 +68,8 @@
             gap: 10px;
       }
       .day{
-            width: .8rem;
-            height: .8rem;
+            width: .6rem;
+            height: .6rem;
       }
       .prevMessCutTitle{
             font-size: 24px;
@@ -78,11 +78,11 @@
             font-size: 16px;
       }
   }
-  @media (max-width:320px){
+  @media (max-width:339px){
       .calendar{
-            width: 16.5rem;
-            padding: 1rem;
-            gap: 8.5px;
+            width: 17rem;
+            padding: .8rem;
+            gap: 8px;
       }
       .day{
             width: .5rem;

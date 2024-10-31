@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './prevMessCut.css';
-import moment from 'moment-timezone';
+// import moment from 'moment-timezone';
 
 const PrevMessCut = () => {
     const [month, setMonth] = useState('');
