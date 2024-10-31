@@ -135,4 +135,7 @@
       .requiredDescription{
         font-size: 12px !important;
       }
+      .user-logoutButton button{
+        padding-inline: 10px;
+      }
     }

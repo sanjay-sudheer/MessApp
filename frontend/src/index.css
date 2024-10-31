@@ -14,4 +14,10 @@ a{
 li{
       list-style: none;
 }
-
+.mainOuter{
+      min-height:90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+}
