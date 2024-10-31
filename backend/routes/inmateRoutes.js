@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const inmateController = require('../controllers/inmateController');
-const authAdminMiddleware = require('../middlewares/authAdminMiddleware');
+const authAdminMiddleware = require('../middlewares/adminAuthMiddleware');
 
 // Define the routes for the inmate model
 router.post('/add',authAdminMiddleware, inmateController.addInmate);

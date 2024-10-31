@@ -15,7 +15,7 @@ export default function AdminEditingOptions() {
     const fetchInmates = async () => {
       try {
         const token = localStorage.getItem('adminToken');
-        const response = await fetch('https://messapp-ymg5.onrender.com/api/inmates/all', {
+        const response = await fetch('http://localhost:5000/api/inmates/all', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
