@@ -48,7 +48,7 @@ const PrevMessCut = () => {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken');
+        const token = localStorage.getItem('token');
         
         // Redirect to /admin-login if token is not found
         if (!token) {
