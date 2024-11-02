@@ -1,21 +1,28 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom';
-import './adminEditingOptions.css'
-import deleteIcon from '../assests/delete.png'
-import addIcon from '../assests/add-user.png'
-import editIcon from '../assests/editing.png'
-import userProfilePic from '../assests/user-profile-icon-removebg-preview.png'
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './adminEditingOptions.css';
+import deleteIcon from '../assests/delete.png';
+import addIcon from '../assests/add-user.png';
+import editIcon from '../assests/editing.png';
+import userProfilePic from '../assests/user-profile-icon-removebg-preview.png';
 
 export default function AdminEditingOptions() {
   const [inmates, setInmates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInmates = async () => {
+      const token = localStorage.getItem('adminToken');
+      
+      // Redirect to /admin-login if token is not found
+      if (!token) {
+        navigate('/admin-login');
+        return;
+      }
+
       try {
-        const token = localStorage.getItem('adminToken');
         const response = await fetch('https://messapp-ymg5.onrender.com/api/inmate/all', {
           method: 'GET',
           headers: {
@@ -39,7 +46,7 @@ export default function AdminEditingOptions() {
     };
 
     fetchInmates();
-  }, []);
+  }, [navigate]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './prevMessCut.css';
+import { useNavigate } from 'react-router-dom'; 
 // import moment from 'moment-timezone';
 
 const PrevMessCut = () => {
@@ -7,6 +8,7 @@ const PrevMessCut = () => {
     const [absentDates, setAbsentDates] = useState([]);
     const [error, setError] = useState(null);
     const [isCalendarFetched, setIsCalendarFetched] = useState(false);
+    const navigate = useNavigate();
 
     // Function to fetch absent dates
     const fetchAbsentDates = async () => {
@@ -44,6 +46,15 @@ const PrevMessCut = () => {
             setError(error.message);
         }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem('adminToken');
+        
+        // Redirect to /admin-login if token is not found
+        if (!token) {
+          navigate('/');
+        }
+      }, [navigate]);
 
     // Effect to set the default month to the current month
     useEffect(() => {
