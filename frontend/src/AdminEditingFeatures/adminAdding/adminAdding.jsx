@@ -9,6 +9,7 @@ export default function AdminAdding() {
     admission: '',
     year: '',
     batch: '',
+    department:'',
   });
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ export default function AdminAdding() {
       admission: '',
       year: '',
       batch: '',
+      department:'',
     });
   };
 
@@ -82,6 +84,18 @@ export default function AdminAdding() {
             onChange={(e) => setUserData({
               ...userData,
               year: e.target.value,
+            })}
+            required
+          />
+          <label htmlFor="dept">Department</label>
+          <input
+            type="text"
+            id="dept"
+            placeholder='Enter your Department'
+            value={userData.department}
+            onChange={(e) => setUserData({
+              ...userData,
+              department: e.target.value,
             })}
             required
           />
