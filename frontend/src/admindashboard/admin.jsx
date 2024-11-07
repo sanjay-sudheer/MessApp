@@ -1,4 +1,3 @@
-// Component.js
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './admin.css';
@@ -32,7 +31,7 @@ export default function AdminPage() {
 
   // Check for admin token
   useEffect(() => {
-    const adminToken = localStorage.getItem("adminToken"); // Adjust storage as needed
+    const adminToken = localStorage.getItem("adminToken");
     if (!adminToken) {
       navigate("/admin-login"); // Redirect to login if token is absent
     }
@@ -42,6 +41,12 @@ export default function AdminPage() {
   const toggleTheme = (selectedTheme) => {
     setTheme(selectedTheme);
     document.body.className = selectedTheme; // Dynamically change body class to apply theme
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken"); // Remove the admin token from localStorage
+    navigate("/admin-login"); // Redirect to login page
   };
 
   return (
@@ -80,7 +85,7 @@ export default function AdminPage() {
                 <>
                   <Button>Profile</Button>
                   <Button>Settings</Button>
-                  <Button>Logout</Button>
+                  <Button onClick={handleLogout}>Logout</Button> {/* Logout button */}
                 </>
               ),
             }}
