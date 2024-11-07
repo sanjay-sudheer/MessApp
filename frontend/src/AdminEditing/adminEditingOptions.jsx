@@ -8,15 +8,16 @@ import userProfilePic from '../assests/user-profile-icon-removebg-preview.png';
 
 export default function AdminEditingOptions() {
   const [inmates, setInmates] = useState([]);
+  const [filteredInmates, setFilteredInmates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInmates = async () => {
       const token = localStorage.getItem('adminToken');
       
-      // Redirect to /admin-login if token is not found
       if (!token) {
         navigate('/admin-login');
         return;
@@ -31,12 +32,11 @@ export default function AdminEditingOptions() {
           },
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch inmate details');
-        }
+        if (!response.ok) throw new Error('Failed to fetch inmate details');
 
         const data = await response.json();
-        setInmates(data); // Set the data directly
+        setInmates(data);
+        setFilteredInmates(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching inmates:', error);
@@ -48,9 +48,47 @@ export default function AdminEditingOptions() {
     fetchInmates();
   }, [navigate]);
 
+  // Filter inmates based on the search term
+  useEffect(() => {
+    setFilteredInmates(
+      inmates.filter(inmate =>
+        inmate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inmate.admissionNumber.includes(searchTerm)
+      )
+    );
+  }, [searchTerm, inmates]);
+
+  // Function to handle delete action
+  const handleDelete = async (admissionNumber) => {
+    const token = localStorage.getItem('adminToken');
+
+    // Confirmation dialog
+    if (window.confirm('Are you sure you want to delete this inmate?')) {
+      try {
+        const response = await fetch(`https://messapp-ymg5.onrender.com/api/inmate/${admissionNumber}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Failed to delete inmate');
+
+        // Update the inmates list after deletion
+        setInmates(prevInmates => prevInmates.filter(inmate => inmate.admissionNumber !== admissionNumber));
+        setFilteredInmates(prevFilteredInmates => prevFilteredInmates.filter(inmate => inmate.admissionNumber !== admissionNumber));
+        alert('Inmate deleted successfully');
+      } catch (error) {
+        console.error('Error deleting inmate:', error);
+        alert('Failed to delete inmate');
+      }
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!inmates.length) return <div>No inmate data available.</div>;
+  if (!filteredInmates.length) return <div>No inmate data available.</div>;
 
   return (
     <div className='outerDiv'>
@@ -60,8 +98,18 @@ export default function AdminEditingOptions() {
           <img src={addIcon} alt="Add member" title='add member' />
         </Link>
       </div>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search by name or admission number"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="searchInput"
+      />
+
       <div className="userListDiv">
-        {inmates.map((inmate) => (
+        {filteredInmates.map((inmate) => (
           <div key={inmate.admissionNumber} className="userDetail">
             <div className="userNamePictureDiv">
               <img src={userProfilePic} alt="Profile" className='userProfilePic' />
@@ -83,9 +131,13 @@ export default function AdminEditingOptions() {
               <Link to={`/adminEditSection/${inmate.admissionNumber}`}>
                 <img src={editIcon} alt="Edit" title='edit member' />
               </Link>
-              <Link to={`/AdminEditing/${inmate.admissionNumber}`}>
-                <img src={deleteIcon} alt="Delete" title='remove member' />
-              </Link>
+              <img
+                src={deleteIcon}
+                alt="Delete"
+                title='remove member'
+                onClick={() => handleDelete(inmate.admissionNumber)}
+                style={{ cursor: 'pointer' }}
+              />
             </div>
           </div>
         ))}

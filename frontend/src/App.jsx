@@ -43,7 +43,7 @@ export default function App() {
           element={<AdminAdding />} 
         />
         <Route 
-          path="/AdminEditSection" 
+          path="/AdminEditSection/:admissionNumber" 
           element={<AdminEditing />} 
         />
         <Route 

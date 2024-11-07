@@ -8,5 +8,6 @@ router.post('/add',authAdminMiddleware, inmateController.addInmate);
 router.get('/all',authAdminMiddleware, inmateController.getAllInmates);
 router.get('/:admissionNumber', inmateController.getInmateByAdmissionNumber);
 router.put('/:admissionNumber',authAdminMiddleware, inmateController.updateInmate);
+router.delete('/:admissionNumber',authAdminMiddleware, inmateController.deleteInmate);
 
 module.exports = router;

@@ -1,119 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './adminEditing.css';
 
 export default function AdminEditing() {
-  const [userData, setUserData] = useState({
+  const { admissionNumber } = useParams();
+  const navigate = useNavigate();
+  const [inmateData, setInmateData] = useState({
+    roomNumber: '',
     name: '',
-    room: '',
-    admission: '',
+    department: '',
     year: '',
     batch: '',
-    department:'',
   });
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    
-    // Redirect to /admin-login if token is not found
-    if (!token) {
-      navigate('/admin-login');
-    }
-  }, [navigate]);
+    const fetchInmateData = async () => {
+      try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`https://messapp-ymg5.onrender.com/api/inmate/${admissionNumber}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
-  const handleFormData = (e) => {
-    e.preventDefault();
-    // Reset form fields
-    setUserData({
-      name: '',
-      room: '',
-      admission: '',
-      year: '',
-      batch: '',
-      department:'',
-    });
+        if (!response.ok) throw new Error('Failed to fetch inmate details');
+        
+        const data = await response.json();
+        setInmateData(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchInmateData();
+  }, [admissionNumber]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInmateData({ ...inmateData, [name]: value });
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`https://messapp-ymg5.onrender.com/api/inmate/${admissionNumber}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+        body: JSON.stringify(inmateData),
+      });
+
+      if (!response.ok) throw new Error('Failed to update inmate details');
+      
+      navigate('/AdminEditing');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div className='mainOuter'>
-      <div className="adminEditing">
-        <form className="editingSection" onSubmit={handleFormData}>
-          <label htmlFor="userName">Name</label>
-          <input
-            type="text"
-            placeholder='Enter your name'
-            id='userName'
-            value={userData.name}
-            onChange={(e) => setUserData({
-              ...userData,
-              name: e.target.value,
-            })}
-            required
-          />
-          <label htmlFor="roomNumber">Room Number</label>
-          <input
-            type="text"
-            placeholder='Enter your Room Number'
-            id='roomNumber'
-            value={userData.room}
-            onChange={(e) => setUserData({
-              ...userData,
-              room: e.target.value,
-            })}
-            required
-          />
-          <label htmlFor="admissionNumber">Admission Number</label>
-          <input
-            type="text"
-            placeholder='Enter your Admission Number'
-            id='admissionNumber'
-            value={userData.admission}
-            onChange={(e) => setUserData({
-              ...userData,
-              admission: e.target.value,
-            })}
-            required
-          />
-          <label htmlFor="year">Year</label>
-          <input
-            type="text"
-            id="year"
-            placeholder='Enter your year'
-            value={userData.year}
-            onChange={(e) => setUserData({
-              ...userData,
-              year: e.target.value,
-            })}
-            required
-          />
-          <label htmlFor="dept">Department</label>
-          <input
-            type="text"
-            id="dept"
-            placeholder='Enter your department'
-            value={userData.department}
-            onChange={(e) => setUserData({
-              ...userData,
-              department: e.target.value,
-            })}
-            required
-          />
-          <label htmlFor="batch">Batch</label>
-          <input
-            type="text"
-            id="batch"
-            placeholder='Enter your Batch'
-            value={userData.batch}
-            onChange={(e) => setUserData({
-              ...userData,
-              batch: e.target.value,
-            })}
-            required
-          />
-          <button type='submit'>Edit the member</button>
-        </form>
-      </div>
+    <div className="adminEditing">
+      <form className="editingSection" onSubmit={handleUpdate}>
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          value={inmateData.name}
+          onChange={handleInputChange}
+          required
+        />
+        <label>Room Number</label>
+        <input
+          type="text"
+          name="roomNumber"
+          value={inmateData.roomNumber}
+          onChange={handleInputChange}
+          required
+        />
+        <label>Department</label>
+        <input
+          type="text"
+          name="department"
+          value={inmateData.department}
+          onChange={handleInputChange}
+          required
+        />
+        <label>Year</label>
+        <input
+          type="number"
+          name="year"
+          value={inmateData.year}
+          onChange={handleInputChange}
+          required
+        />
+        <label>Batch</label>
+        <input
+          type="text"
+          name="batch"
+          value={inmateData.batch}
+          onChange={handleInputChange}
+          required
+        />
+        <button type="submit">Update Inmate</button>
+      </form>
     </div>
   );
 }
