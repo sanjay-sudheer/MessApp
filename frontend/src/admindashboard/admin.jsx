@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './admin.css';
 
+// Icons (using Unicode symbols for simplicity)
+const SearchIcon = () => <span>🔍</span>;
+const SettingsIcon = () => <span>⚙️</span>;
+const UserIcon = () => <span>👤</span>;
+const ThemeIcon = () => <span>🎨</span>;
+const DashboardIcon = () => <span>📊</span>;
+const ReportIcon = () => <span>📈</span>;
+const UsersIcon = () => <span>👥</span>;
+const MessIcon = () => <span>🍽️</span>;
+
 // Basic button component
 function Button({ children, onClick, className }) {
   return (
@@ -26,7 +36,7 @@ function DropdownMenu({ children }) {
 
 // Main Admin Page
 export default function AdminPage() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const navigate = useNavigate();
 
   // Check for admin token
@@ -53,23 +63,33 @@ export default function AdminPage() {
     <div className={`container ${theme}`}>
       <header className="header">
         <div className="brand">
+          <DashboardIcon />
           <span>Hostel Mess Admin</span>
         </div>
         <div className="search-bar">
           <form>
             <div className="input-wrapper">
-              <input className="search-input" placeholder="Search" type="search" />
+              <input 
+                className="search-input" 
+                placeholder="Search dashboard..." 
+                type="search" 
+              />
             </div>
           </form>
         </div>
         <div className="header-actions">
           <DropdownMenu>
             {{
+              trigger: (
+                <Button className="dropdown-trigger">
+                  <ThemeIcon /> Theme
+                </Button>
+              ),
               content: (
                 <>
-                  <Button onClick={() => toggleTheme("light")}>Light</Button>
-                  <Button onClick={() => toggleTheme("dark")}>Dark</Button>
-                  <Button onClick={() => toggleTheme("system")}>System</Button>
+                  <Button onClick={() => toggleTheme("light")}>☀️ Light</Button>
+                  <Button onClick={() => toggleTheme("dark")}>🌙 Dark</Button>
+                  <Button onClick={() => toggleTheme("system")}>💻 System</Button>
                 </>
               ),
             }}
@@ -77,15 +97,15 @@ export default function AdminPage() {
           <DropdownMenu>
             {{
               trigger: (
-                <Button className="user-avatar-button">
-                  <img alt="Avatar" className="avatar" src="/placeholder-user.jpg" />
+                <Button className="dropdown-trigger">
+                  <UserIcon /> Admin
                 </Button>
               ),
               content: (
                 <>
-                  <Button>Profile</Button>
-                  <Button>Settings</Button>
-                  <Button onClick={handleLogout}>Logout</Button> {/* Logout button */}
+                  <Button><UserIcon /> Profile</Button>
+                  <Button><SettingsIcon /> Settings</Button>
+                  <Button onClick={handleLogout}>🚪 Logout</Button>
                 </>
               ),
             }}
@@ -93,33 +113,39 @@ export default function AdminPage() {
         </div>
       </header>
       <main className="main-content">
-        <h1 className="dashboard-title">Hostel Mess Admin Dashboard</h1>
+        <h1 className="dashboard-title">Admin Dashboard</h1>
         <div className="dashboard-grid">
           <div className="card">
             <div className="card-header">
-              <h2>Global Messcut</h2>
-              <p>Manage mess cuts for all students</p>
+              <h2><MessIcon /> Global Messcut</h2>
+              <p>Manage mess cuts for all students across the hostel with advanced scheduling and bulk operations</p>
             </div>
             <div className="card-content">
-              <Link to="/global-mess" className="full-button">Manage Global Messcut</Link>
+              <Link to="/global-mess" className="full-button">
+                Manage Global Messcut →
+              </Link>
             </div>
           </div>
           <div className="card">
             <div className="card-header">
-              <h2>Monthly Mess Report</h2>
-              <p>Generate and view monthly attendance reports</p>
+              <h2><ReportIcon /> Monthly Reports</h2>
+              <p>Generate comprehensive monthly attendance reports with detailed analytics and insights</p>
             </div>
             <div className="card-content">
-              <Link to="/viewreport" className="full-button">View Monthly Report</Link>
+              <Link to="/viewreport" className="full-button">
+                View Monthly Report →
+              </Link>
             </div>
           </div>
           <div className="card">
             <div className="card-header">
-              <h2>User Management</h2>
-              <p>Add, edit, or remove user accounts</p>
+              <h2><UsersIcon /> User Management</h2>
+              <p>Add, edit, or remove user accounts with role-based access control and bulk operations</p>
             </div>
             <div className="card-content">
-              <Link to="/AdminEditing" className="full-button">Manage Users</Link>
+              <Link to="/AdminEditing" className="full-button">
+                Manage Users →
+              </Link>
             </div>
           </div>
         </div>

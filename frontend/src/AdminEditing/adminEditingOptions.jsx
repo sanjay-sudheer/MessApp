@@ -12,6 +12,7 @@ export default function AdminEditingOptions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,15 +49,27 @@ export default function AdminEditingOptions() {
     fetchInmates();
   }, [navigate]);
 
-  // Filter inmates based on the search term
+  // Filter inmates based on search term and filters
   useEffect(() => {
-    setFilteredInmates(
-      inmates.filter(inmate =>
-        inmate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inmate.admissionNumber.includes(searchTerm)
-      )
+    let filtered = inmates.filter(inmate =>
+      inmate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      inmate.admissionNumber.includes(searchTerm)
     );
-  }, [searchTerm, inmates]);
+
+    if (yearFilter) {
+      // Convert year filter to string and match with inmate.year
+      filtered = filtered.filter(inmate => 
+        inmate.year && inmate.year.toString() === yearFilter
+      );
+    }
+
+    setFilteredInmates(filtered);
+  }, [searchTerm, inmates, yearFilter]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setYearFilter('');
+  };
 
   const handleDelete = async (admissionNumber) => {
     const token = localStorage.getItem('adminToken');
@@ -82,25 +95,57 @@ export default function AdminEditingOptions() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <div className='outerDiv'>
+      <div className="loading">Loading members...</div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className='outerDiv'>
+      <div className="error">Error: {error}</div>
+    </div>
+  );
 
   return (
     <div className='outerDiv'>
       <div className='adminEditingheader'>
-        <span>Edit Members</span>
+        <span>👥 Manage Members</span>
         <Link to='/AdminAddingSection'>
-          <img src={addIcon} alt="Add member" title='add member' />
+          <img src={addIcon} alt="Add member" title='Add new member' />
         </Link>
       </div>
 
       <input
         type="text"
-        placeholder="Search by name or admission number"
+        placeholder="🔍 Search by name or admission number..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="searchInput"
       />
+
+      {/* Filter Section */}
+      <div className="filterSection">
+        <div className="filterGroup">
+          <label className="filterLabel">📅 Filter by Year</label>
+          <select 
+            value={yearFilter} 
+            onChange={(e) => setYearFilter(e.target.value)}
+            className="filterSelect"
+          >
+            <option value="">All Years</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+          </select>
+        </div>
+
+        {(yearFilter || searchTerm) && (
+          <button onClick={clearFilters} className="clearFiltersBtn">
+            🗑️ Clear Filters
+          </button>
+        )}
+      </div>
 
       <div className="userListDiv">
         {filteredInmates.length ? (
@@ -108,28 +153,25 @@ export default function AdminEditingOptions() {
             <div key={inmate.admissionNumber} className="userDetail">
               <div className="userNamePictureDiv">
                 <img src={userProfilePic} alt="Profile" className='userProfilePic' />
-                <span className='userName'>
-                  {inmate.name}
-                  <br />
-                  <span className='userDescription'>Admission No: {inmate.admissionNumber}</span>
-                  <br />
-                  <span className='userDescription'>Room No: {inmate.roomNumber}</span>
-                  <br />
-                  <span className='userDescription'>Department: {inmate.department}</span>
-                  <br />
-                  <span className='userDescription'>Year: {inmate.year}</span>
-                  <br />
-                  <span className='userDescription'>Batch: {inmate.batch}</span>
-                </span>
+                <div className='userName'>
+                  <div style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>
+                    {inmate.name}
+                  </div>
+                  <div className='userDescription'>📝 Admission: {inmate.admissionNumber}</div>
+                  <div className='userDescription'>🏠 Room: {inmate.roomNumber}</div>
+                  <div className='userDescription'>🎓 Department: {inmate.department}</div>
+                  <div className='userDescription'>📅 Year: {inmate.year}</div>
+                  <div className='userDescription'>👨‍🎓 Batch: {inmate.batch}</div>
+                </div>
               </div>
               <div className="editingIconSections">
                 <Link to={`/adminEditSection/${inmate.admissionNumber}`}>
-                  <img src={editIcon} alt="Edit" title='edit member' />
+                  <img src={editIcon} alt="Edit" title='Edit member details' />
                 </Link>
                 <img
                   src={deleteIcon}
                   alt="Delete"
-                  title='remove member'
+                  title='Remove member'
                   onClick={() => handleDelete(inmate.admissionNumber)}
                   style={{ cursor: 'pointer' }}
                 />
@@ -138,9 +180,10 @@ export default function AdminEditingOptions() {
           ))
         ) : (
           <div className="noData">
-            <p>No inmate data available. Try adjusting the search or adding new members.</p>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📭</div>
+            <p>No members found. Try adjusting your search or add new members to get started.</p>
             <Link to='/admin'>
-              <button className="backButton">Back to Dashboard</button>
+              <button className="backButton">← Back to Dashboard</button>
             </Link>
           </div>
         )}
