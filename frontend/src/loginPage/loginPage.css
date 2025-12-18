@@ -60,6 +60,9 @@
       opacity: .7;
       font-size: 13px;
 }
+.errorMessage {
+      color:black ;
+}
 @media(max-width:437px){
       .loginPage{
             padding: 1.5rem;
