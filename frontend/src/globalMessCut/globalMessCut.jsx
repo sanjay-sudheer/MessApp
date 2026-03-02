@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./globalMessCut.css";
-import userProfilePic from "../assests/user-profile-icon-removebg-preview.png";
 
 function GlobalMessCut() {
   const [fromDate, setFromDate] = useState('');
@@ -13,7 +12,6 @@ function GlobalMessCut() {
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      // Redirect to login page if token is not found
       navigate('/admin-login');
     }
   }, [navigate]);
@@ -35,13 +33,13 @@ function GlobalMessCut() {
     setMessage('');
 
     try {
-      const token = localStorage.getItem('adminToken'); // Retrieve the admin token
+      const token = localStorage.getItem('adminToken');
 
       const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/mark-global-attendance', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`, // Include the token in the Authorization header
+          'Authorization': `${token}`,
         },
         body: JSON.stringify(requestData),
       });
@@ -49,12 +47,12 @@ function GlobalMessCut() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage('Global attendance marked successfully');
+        setMessage('✅ Global attendance marked successfully');
       } else {
-        setMessage(result.message || 'Error marking global attendance');
+        setMessage(result.message || '❌ Error marking global attendance');
       }
     } catch (error) {
-      setMessage('Error: Unable to mark global attendance');
+      setMessage('❌ Error: Unable to mark global attendance');
     } finally {
       setIsLoading(false);
     }
@@ -63,40 +61,58 @@ function GlobalMessCut() {
   return (
     <div className='mainOuter'>
       <div className="userProfile">
+
+        {/* ── Wave Header ── */}
         <div className="userheader">
-          <div className="profileIcon">
-            <img src={userProfilePic} alt="User Profile" />
-          </div>
           <div className="userNameDescription">
-            <span className='userName'>Sanjay Sudheer</span>
-            <br />
-            <span className='userDescription'>Mess Secretary</span>
+            <span className="headerPill">🍽️ Admin</span>
+            <span className="userName">Global Mess Cut</span>
+            <span className="userDescription">Mark absence for all students</span>
+          </div>
+          <div className="profileIcon">
+            ✂️
           </div>
         </div>
+
+        {/* ── Form Body ── */}
         <div className='MessCutformSection'>
+          <span className="sectionLabel">📅 Select Date Range</span>
           <form className="messCutReport" onSubmit={handleSubmit}>
-            <label htmlFor="from">From:</label>
-            <input
-              type="date"
-              id="from"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              required
-            />
-            <label htmlFor="to">To:</label>
-            <input
-              type="date"
-              id="to"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              required
-            />
+
+            <div className="inputGroup">
+              <label htmlFor="from">From</label>
+              <input
+                type="date"
+                id="from"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="inputGroup">
+              <label htmlFor="to">To</label>
+              <input
+                type="date"
+                id="to"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                required
+              />
+            </div>
+
             <button type='submit' disabled={isLoading}>
-              {isLoading ? 'Submitting...' : 'Submit'}
+              {isLoading ? '⏳ Submitting...' : '✔ Apply Global Mess Cut'}
             </button>
           </form>
-          {message && <div className="message">{message}</div>}
+
+          {message && (
+            <div className={`message ${message.includes('✅') ? 'success' : message.includes('❌') ? 'error' : ''}`}>
+              {message}
+            </div>
+          )}
         </div>
+
       </div>
     </div>
   );
