@@ -89,9 +89,17 @@ export default function AdminEditing() {
 
           <span className="editSectionLabel">📋 Student Details</span>
 
-          {/* Admission number read-only badge */}
-          <div className="editAdmBadge">
-            📝 {admissionNumber}
+          <div className="editField">
+            <label htmlFor="editAdmission">Admission Number</label>
+            <input
+              id="editAdmission"
+              type="text"
+              name="admissionNumber"
+              value={inmateData.admissionNumber || admissionNumber}
+              onChange={handleInputChange}
+              placeholder="e.g. 11025-22"
+              required
+            />
           </div>
 
           <div className="editField">
