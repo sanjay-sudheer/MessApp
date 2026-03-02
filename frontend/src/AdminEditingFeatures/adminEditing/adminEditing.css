@@ -1,216 +1,329 @@
-/* Modern Dark Theme Admin Editing Form */
-* {
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
+
+/* ── Hard reset scoped to this page only ── */
+.editPage,
+.editPage *,
+.editPage *::before,
+.editPage *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+  background-image: none;
+  -webkit-text-fill-color: unset;
 }
 
-.outerContainer {
+/* ── Variables ── */
+.editPage {
+  --saffron:    #ff6d2e;
+  --gold:       #ff9a00;
+  --border:     #ffe0c2;
+  --input-bg:   #fffaf6;
+  --text-dark:  #1a1a1a;
+  --text-label: #666;
+  --text-grey:  #888;
+}
+
+/* ── Page ── */
+.editPage {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-  color: #f7fafc;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-}
-
-.editingSection {
+  min-height: 100dvh;
   width: 100%;
-  max-width: 32rem;
   display: flex;
-  flex-direction: column;
-  padding: 3rem;
-  border-radius: 16px;
-  background: #2d3748;
-  border: 3px solid #4a5568;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  position: relative;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #fff8f0 0%, #ffeedd 100%);
+  padding: 40px 20px;
 }
 
-.editingSection::before {
+/* ── Card ── */
+.editCard {
+  background: #ffffff;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(255,100,20,0.15), 0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: editFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes editFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Wave Header ── */
+.editHeader {
+  position: relative;
+  background:
+    url("data:image/svg+xml,%3Csvg width='400' height='200' viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='340' cy='40' r='100' fill='rgba(255,255,255,0.07)'/%3E%3Ccircle cx='30' cy='130' r='70' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='180' cy='10' r='50' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover,
+    linear-gradient(135deg, #ff5500 0%, #ff7d00 45%, #ffaa00 100%);
+  padding: 28px 24px 64px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.editHeader::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(135deg, #34d399, #10b981);
-  border-radius: 16px 16px 0 0;
+  bottom: -1px; left: 0; right: 0;
+  height: 44px;
+  background: #ffffff;
+  clip-path: ellipse(55% 100% at 50% 100%);
 }
 
-.formTitle {
-  font-size: 2.5rem;
-  font-weight: 900;
-  margin-bottom: 2.5rem;
-  text-align: center;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  letter-spacing: -0.02em;
+.editHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
 }
 
-.editingSection label {
-  font-size: 1.1rem;
+.editPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,0,0,0.15);
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+  width: fit-content;
+}
+
+.editTitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.55rem;
   font-weight: 800;
-  color: #e2e8f0;
-  margin-bottom: 0.75rem;
-  display: block;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.editingSection input,
-.editingSection select {
-  height: 3.5rem;
-  border: 2px solid #4a5568;
-  border-radius: 8px;
-  padding: 0 1.5rem;
-  margin-bottom: 2rem;
-  background: #4a5568;
   color: #ffffff;
-  font-size: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.editSubtitle {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+}
+
+.editIconBadge {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Form body ── */
+.editBody {
+  background: #ffffff;
+  padding: 28px 24px 32px;
+}
+
+.editSectionLabel {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ff6d2e;
+  margin-bottom: 20px;
+}
+
+/* ── Admission number badge (read-only) ── */
+.editAdmBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff3e8;
+  border: 1.5px solid #ffe0c2;
+  border-radius: 10px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ff6d2e;
+  margin-bottom: 20px;
+  font-family: 'Sora', sans-serif;
+}
+
+/* ── Field ── */
+.editField {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.editField label {
+  font-size: 0.78rem;
   font-weight: 600;
-  outline: none;
-  transition: all 0.3s ease;
+  color: #666666;
+  display: block;
+}
+
+.editField input,
+.editField select {
+  display: block;
   width: 100%;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 13px 16px;
+  border: 1.5px solid #ffe0c2;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  color: #1a1a1a;
+  -webkit-text-fill-color: #1a1a1a;
+  background-color: #fffaf6;
+  outline: none;
+  box-shadow: none;
+  height: auto;
+  margin: 0;
+  transform: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.editingSection input:focus,
-.editingSection select:focus {
-  border-color: #34d399;
-  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
-  background: #10b981;
-  transform: translateY(-1px);
+.editField input:focus,
+.editField select:focus {
+  border-color: #ff6d2e;
+  box-shadow: 0 0 0 3px rgba(255,109,46,0.12);
+  background-color: #ffffff;
+  -webkit-text-fill-color: #1a1a1a;
+  transform: none;
+  outline: none;
 }
 
-.editingSection input::placeholder {
-  color: #cbd5e0;
+.editField input::placeholder {
+  color: #c0b0a0;
+  -webkit-text-fill-color: #c0b0a0;
+}
+
+.editField select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23ff6d2e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-color: #fffaf6;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.editField select option {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+/* ── Two-col row ── */
+.editRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Submit button ── */
+.editSubmitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff6d2e 0%, #ff9a00 100%);
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(255,109,46,0.38);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.editSubmitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255,109,46,0.45);
+}
+
+.editSubmitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Loading / Error states ── */
+.editStateBox {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(145deg, #fff8f0 0%, #ffeedd 100%);
+  font-family: 'Outfit', sans-serif;
+}
+
+.editSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #ffe0c2;
+  border-top-color: #ff6d2e;
+  border-radius: 50%;
+  animation: editSpin 0.7s linear infinite;
+}
+
+@keyframes editSpin {
+  to { transform: rotate(360deg); }
+}
+
+.editStateBox p {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.editErrorBox {
+  background: #fff5f5;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  color: #dc2626;
+  padding: 12px 20px;
+  font-size: 0.84rem;
   font-weight: 500;
 }
 
-.editingSection select option {
-  background: #2d3748;
-  color: #ffffff;
-  padding: 1rem;
-  border: none;
-}
-
-.editingSection button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  border: none;
-  color: #ffffff;
-  padding: 1.25rem 2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
-  margin-top: 1.5rem;
-}
-
-.editingSection button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(52, 211, 153, 0.6);
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.editingSection button:active {
-  transform: translateY(-2px);
-}
-
-.editingSection button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.2);
-}
-
-/* Update/Save button specific styling */
-.updateButton {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
-  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4) !important;
-}
-
-.updateButton:hover {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  box-shadow: 0 10px 30px rgba(52, 211, 153, 0.6) !important;
-}
-
-/* Cancel or secondary button */
-.secondaryButton {
-  background: #4a5568 !important;
-  color: #ffffff !important;
-  border: 2px solid #718096 !important;
-  margin-top: 1rem !important;
-}
-
-.secondaryButton:hover {
-  background: #718096 !important;
-  color: #ffffff !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(113, 128, 150, 0.4) !important;
-}
-
-/* Error and success states */
-.inputError {
-  border-color: #f56565 !important;
-  box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.3) !important;
-  background: #fc8181 !important;
-}
-
-.inputSuccess {
-  border-color: #48bb78 !important;
-  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3) !important;
-  background: #68d391 !important;
-}
-
-.errorMessage {
-  color: #fed7d7;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-top: -1.5rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background: rgba(245, 101, 101, 0.2);
-  border-radius: 4px;
-}
-
-.successMessage {
-  color: #c6f6d5;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-top: -1.5rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background: rgba(72, 187, 120, 0.2);
-  border-radius: 4px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .outerContainer {
-    padding: 1rem;
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .editPage {
+    padding: 0;
+    align-items: stretch;
   }
-  
-  .editingSection {
-    padding: 2rem;
+  .editCard {
     max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
   }
-  
-  .formTitle {
-    font-size: 1.5rem;
-  }
-  
-  .editingSection input,
-  .editingSection select {
-    height: 2.5rem;
+  .editBody {
+    flex: 1;
   }
 }
