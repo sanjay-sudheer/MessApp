@@ -1,141 +1,289 @@
-/* Header styles starts */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --saffron:   #ff6d2e;
+  --gold:      #ff9a00;
+  --deep:      #c94a00;
+  --card-bg:   #ffffff;
+  --text-dark: #1a1a1a;
+  --text-grey: #999;
+  --text-label:#666;
+  --border:    #ffe0c2;
+  --input-bg:  #fffaf6;
+}
+
+/* ── Page ── */
+.mainOuter {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #fff8f0 0%, #ffeedd 100%);
+  font-family: 'Outfit', sans-serif;
+  padding: 40px 20px;
+}
+
+/* ── Card ── */
 .user-userProfile {
-      background-color: white;
-      border: none;
-      border-radius: 1rem;
-      padding: 2rem;
-      width: 25rem;
-      margin: 0 auto; /* Center the profile on larger screens */
-    }
-    
-    .user-userheader {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding-bottom: 1rem;
-      position: relative;
-    }
-    
-    .user-userDescription {
-      text-transform: uppercase;
-      opacity: .6;
-    }
-    
-    .user-profileIcon img {
-      margin-left: -7px;
-      width: 5rem;
-    }
-    
-    .user-logoutButton {
-      position: absolute;
-      right: 0;
-    }
-    
-    .user-logoutButton button {
-      background-color: transparent;
-      border: 1px groove grey;
-      border-radius: .5rem;
-      padding-inline: 1rem;
-      padding-block: .5rem;
-      font-weight: 600;
-    }
-    
-    /* Header styles ends */
-    
-    .user-attendanceHeading {
-      font-weight: 700;
-      font-size: 16px;
-    }
-    
-    .user-attendanceGraph {
-      width: 100%;
-      height: .5rem;
-      border: 1px groove grey;
-      border-radius: 1rem;
-      background-color: transparent;
-      margin-block: 10px;
-    }
-    
-    .user-loading {
-      width: inherit;
-      height: inherit;
-      border-radius: inherit;
-      background-color: black;
-      transition: all .5s linear;
-    }
-    
-    .attendanceDescription {
-      opacity: .7;
-      font-size: 13px;
-    }
-    
-    .user-MessCutformSection input {
-      margin-block: 2rem;
-      padding: 1rem;
-      border: 1px groove;
-      border-radius: .5rem;
-    }
-    
-    .user-messCutReport {
-      display: flex;
-      flex-direction: column;
-      padding-top: 2rem;
-    }
-    
-    .user-messCutReport button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      background-color: black;
-      border: none;
-      color: white;
-      padding: .7rem;
-      border-radius: .5rem;
-      cursor: pointer;
-      text-transform: uppercase; 
-    }
-    
-    .user-messCutReport button:hover {
-      background-color: rgb(12, 12, 12);
-    } 
-    .user-logoutButton{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: .5rem; 
-    }
-    /* Responsive styles */
-    @media (max-width:488px) {
-      .user-userProfile{
-        width: 20rem;
-      }
-      .user-userDescription{
-        font-size: 13px;
-      }
-      .user-userProfile label{
-        font-size: 14px;
-      }
-      .user-logoutButton{
-        display: flex;
-        flex-direction: column;
-      }
-      .user-logoutButton button{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 25px;
-      }
-    }
-    @media (max-width:411px) {
-      .user-userProfile{
-        width: 16rem;
-      }
-      .requiredDescription{
-        font-size: 12px !important;
-      }
-      .user-logoutButton button{
-        padding-inline: 10px;
-      }
-    }
+  background: var(--card-bg);
+  border-radius: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow:
+    0 20px 60px rgba(255,100,20,0.15),
+    0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ── */
+.user-userheader {
+  position: relative;
+  background:
+    url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='320' cy='60' r='120' fill='rgba(255,255,255,0.07)'/%3E%3Ccircle cx='40' cy='160' r='80' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='200' cy='20' r='60' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover,
+    linear-gradient(135deg, #ff5500 0%, #ff7d00 45%, #ffaa00 100%);
+  padding: 28px 24px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Wave cutout at bottom of header */
+.user-userheader::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 48px;
+  background: var(--card-bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ── User info (left side) ── */
+.user-userInfo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Avatar — overlaps wave */
+.user-profileIcon {
+  width: 58px;
+  height: 58px;
+  background: rgba(255,255,255,0.95);
+  border: 3px solid rgba(255,255,255,1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.15),
+    0 0 0 4px rgba(255,255,255,0.3);
+  position: relative;
+  z-index: 3;
+}
+
+.user-profileIcon::after { content: '👤'; }
+
+.user-profileIcon img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.user-userNameDescription {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-userName {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.user-userDescription {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  background: rgba(0,0,0,0.15);
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-block;
+  width: fit-content;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Logout buttons ── */
+.user-logoutButton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+.user-logoutButton button {
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.6);
+  border-radius: 10px;
+  padding: 7px 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.12s;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(6px);
+}
+
+.user-logoutButton button:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+/* ── Body (below wave) ── */
+.user-MessCutformSection {
+  padding: 12px 28px 32px;
+}
+
+.requiredDescription {
+  display: block;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: var(--saffron) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em;
+  margin-bottom: 22px;
+  opacity: 1 !important;
+}
+
+/* ── Form ── */
+.user-messCutReport {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0;
+}
+
+.user-messCutReport label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-label);
+  margin-bottom: 7px;
+}
+
+.user-MessCutformSection input,
+.user-messCutReport input {
+  margin-block: 0;
+  margin-bottom: 18px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-dark);
+  background: var(--input-bg);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.user-MessCutformSection input:focus,
+.user-messCutReport input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255,109,46,0.1);
+}
+
+/* ── Submit button ── */
+.user-messCutReport button[type='submit'] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--gold) 100%);
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 24px rgba(255,109,46,0.38);
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-top: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-messCutReport button[type='submit']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.user-messCutReport button[type='submit']:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255,109,46,0.45);
+}
+
+.user-messCutReport button[type='submit']:active {
+  transform: translateY(0);
+}
+
+.user-messCutReport button[type='submit']:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Mobile ── */
+@media (max-width: 488px) {
+  .mainOuter {
+    padding: 0;
+    align-items: stretch;
+  }
+  .user-userProfile {
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .user-userheader {
+    padding: 24px 20px 60px;
+  }
+  .user-MessCutformSection {
+    padding: 10px 20px 32px;
+  }
+}
+
+@media (max-width: 411px) {
+  .user-userName { font-size: 1rem; }
+  .requiredDescription { font-size: 0.68rem !important; }
+  .user-logoutButton button { font-size: 0.65rem; padding: 6px 10px; }
+}
