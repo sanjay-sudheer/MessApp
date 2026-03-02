@@ -6,20 +6,12 @@
   --card-bg:   #ffffff;
   --text-dark: #1a1a1a;
   --text-grey: #888;
-  --text-label:#555;
+  --text-label:#666;
   --border:    #ffe0c2;
   --input-bg:  #fffaf6;
-  --badge-bg:  #fff3e0;
-  --badge-txt: #e65100;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
 /* ── Page ── */
 .mainOuter {
@@ -30,7 +22,6 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   background: linear-gradient(145deg, #fff8f0 0%, #ffeedd 100%);
-  background-attachment: fixed;
   font-family: 'Outfit', sans-serif;
   padding: 40px 20px;
 }
@@ -38,74 +29,132 @@ html, body, #root {
 /* ── Card ── */
 .loginPage {
   background: var(--card-bg);
-  border-radius: 20px;
-  padding: 40px 36px;
+  border-radius: 28px;
   width: 100%;
-  max-width: 380px;
-  box-shadow: 0 8px 30px rgba(255,100,20,0.12);
+  max-width: 400px;
+  box-shadow:
+    0 20px 60px rgba(255,100,20,0.15),
+    0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-/* ── Badge ── */
-.messBadge {
-  display: inline-block;
-  background: var(--badge-bg);
-  color: var(--badge-txt);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 100px;
-  margin-bottom: 14px;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Header ── */
 .headerSection {
+  position: relative;
+  background:
+    url("data:image/svg+xml,%3Csvg width='400' height='200' viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='340' cy='40' r='100' fill='rgba(255,255,255,0.07)'/%3E%3Ccircle cx='30' cy='130' r='70' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='180' cy='10' r='50' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover,
+    linear-gradient(135deg, #ff5500 0%, #ff7d00 45%, #ffaa00 100%);
+  padding: 28px 24px 64px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Wave cutout */
+.headerSection::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 44px;
+  background: var(--card-bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+.headerTitleBlock {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding-bottom: 24px;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.messBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  background: rgba(0,0,0,0.15);
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-block;
+  width: fit-content;
+  backdrop-filter: blur(4px);
+  margin-bottom: 4px;
 }
 
 .loginTitle {
   font-family: 'Sora', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: var(--text-dark);
-  line-height: 1.2;
-  margin-bottom: 8px;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: block;
 }
 
 .userLoginPage-loginDescription {
-  color: var(--text-grey);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  display: block;
+  line-height: 1.4;
 }
 
-/* ── Inputs ── */
+.headerIconBadge {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+/* ── Form body ── */
+.formSection {
+  padding: 10px 24px 32px;
+}
+
+/* ── Input fields ── */
 .inputSection {
   display: flex;
   flex-direction: column;
-  padding-bottom: 1rem;
+  padding-bottom: 16px;
 }
 
 .inputSection label {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: var(--text-label);
-  margin-bottom: 7px;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
 }
 
 .inputSection input {
+  padding: 13px 16px;
   border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 11px 14px;
-  font-size: 0.88rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-family: 'Outfit', sans-serif;
   color: var(--text-dark);
   background: var(--input-bg);
   outline: none;
-  transition: border-color 0.2s;
   height: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .inputSection input::placeholder { color: #ccc; }
@@ -131,7 +180,7 @@ html, body, #root {
 .loginButtonDiv {
   display: flex;
   width: 100%;
-  padding-top: 1.3rem;
+  padding-top: 8px;
 }
 
 .loginButton {
@@ -142,31 +191,63 @@ html, body, #root {
   background: linear-gradient(135deg, var(--saffron) 0%, var(--gold) 100%);
   border: none;
   color: white;
-  padding: 13px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 14px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: 'Sora', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  box-shadow: 0 6px 20px rgba(255,109,46,0.35);
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 24px rgba(255,109,46,0.38);
   transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .loginButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(255,109,46,0.4);
+  box-shadow: 0 12px 32px rgba(255,109,46,0.45);
 }
 
-.loginButton:active {
-  transform: translateY(0);
-}
+.loginButton:active { transform: translateY(0); }
 
-/* ── Responsive ── */
-@media (max-width: 437px) {
-  .loginPage {
-    padding: 1.5rem;
-    width: 19rem;
+/* ── Mobile: full screen ── */
+@media (max-width: 480px) {
+  .mainOuter {
+    padding: 0;
+    align-items: stretch;
   }
+  .loginPage {
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .headerSection {
+    padding: 28px 20px 64px;
+  }
+  .formSection {
+    padding: 10px 20px 32px;
+    flex: 1;
+  }
+  .loginButton {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .loginTitle { font-size: 1.2rem; }
+  .formSection { padding: 8px 16px 28px; }
 }

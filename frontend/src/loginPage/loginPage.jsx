@@ -45,14 +45,19 @@ export default function LoginPage() {
     <div className='mainOuter'>
       <div className="loginPage">
 
+        {/* ── Header with wave ── */}
         <div className="headerSection">
-          <span className="messBadge">🍽 Mess Portal</span>
-          <span className="loginTitle">Mess Attendance Login</span>
-          <span className="userLoginPage-loginDescription">
-            Enter your admission number and room number
-          </span>
+          <div className="headerTitleBlock">
+            <span className="messBadge">🍽️ College Mess Portal</span>
+            <span className="loginTitle">Mess Attendance Login</span>
+            <span className="userLoginPage-loginDescription">
+              Enter your admission number and room number
+            </span>
+          </div>
+          <div className="headerIconBadge">🔐</div>
         </div>
 
+        {/* ── Form ── */}
         <form className='formSection' onSubmit={handleSubmit}>
           {error && <div className="errorMessage">{error}</div>}
 
