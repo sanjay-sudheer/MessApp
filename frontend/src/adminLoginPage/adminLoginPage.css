@@ -1,73 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --saffron:   #ff6d2e;
+  --gold:      #ff9a00;
+  --card-bg:   #ffffff;
+  --text-dark: #1a1a1a;
+  --text-label:#666;
+  --border:    #ffe0c2;
+  --input-bg:  #fffaf6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Page ── */
+.mainOuter {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #fff8f0 0%, #ffeedd 100%);
+  font-family: 'Outfit', sans-serif;
+  padding: 40px 20px;
+}
+
+/* ── Card ── */
+.adminLoginPage {
+  background: var(--card-bg);
+  border-radius: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow:
+    0 20px 60px rgba(255,100,20,0.15),
+    0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ── */
+.headerSection {
+  position: relative;
+  background:
+    url("data:image/svg+xml,%3Csvg width='400' height='200' viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='340' cy='40' r='100' fill='rgba(255,255,255,0.07)'/%3E%3Ccircle cx='30' cy='130' r='70' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='180' cy='10' r='50' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover,
+    linear-gradient(135deg, #ff5500 0%, #ff7d00 45%, #ffaa00 100%);
+  padding: 28px 24px 64px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.headerSection::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 44px;
+  background: var(--card-bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+.headerTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.adminBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  background: rgba(0,0,0,0.15);
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-block;
+  width: fit-content;
+  backdrop-filter: blur(4px);
+  margin-bottom: 4px;
+}
+
+.loginTitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: block;
+}
+
+.loginDescription {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  display: block;
+  line-height: 1.4;
+  letter-spacing: 0;
+  opacity: 1;
+}
+
+.headerIconBadge {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+/* ── Form body ── */
+.formSection {
+  padding: 10px 24px 32px;
+}
+
+/* ── Inputs ── */
+.inputSection {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+}
+
+.inputSection label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-label);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  opacity: 1;
+}
+
+.inputSection input {
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-dark);
+  background: var(--input-bg);
+  outline: none;
+  height: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inputSection input::placeholder { color: #ccc; }
+
+.inputSection input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255,109,46,0.1);
+}
+
+/* ── Error ── */
+.errorMessage {
+  background: #fff3f0;
+  border: 1px solid #ffcab8;
+  color: #c0391a;
+  font-size: 0.82rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* ── Button ── */
+.loginButtonDiv {
+  display: flex;
+  width: 100%;
+  padding-top: 8px;
+}
+
+.loginButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--gold) 100%);
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 24px rgba(255,109,46,0.38);
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255,109,46,0.45);
+}
+
+.loginButton:active { transform: translateY(0); }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .mainOuter {
+    padding: 0;
+    align-items: stretch;
+  }
   .adminLoginPage {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-  }
-  
-  .inputSection {
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding-bottom: 1rem;
   }
-  
-  .inputSection input {
-    height: 2rem;
-    border: 1px solid grey;
-    border-radius: .5rem;
-    padding-left: .5rem;
-  }
-  
-  .inputSection input:focus {
-    outline: none;
-  }
-  
-  .inputSection label {
-    opacity: .9;
-    font-size: 14px;
-    margin-bottom: .5rem;
-  }
-  
   .headerSection {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 2rem;
+    padding: 28px 20px 64px;
   }
-  
-  .loginButtonDiv {
-    display: flex;
-    width: 100%;
-    padding-top: 1.3rem;
+  .formSection {
+    padding: 10px 20px 32px;
+    flex: 1;
   }
-  
-  .loginButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    background-color: black;
-    border: none;
-    color: white;
-    padding: .7rem;
-    border-radius: .5rem;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-  
-  .loginButton:hover {
-    background-color: rgb(12, 12, 12);
-  }
-  
-  .loginTitle {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 24px;
-  }
-  
-  .loginDescription {
-    opacity: .7;
-    font-size: 13px;
-    letter-spacing: 1px;
-  }
-  
+}
+
+@media (max-width: 360px) {
+  .loginTitle { font-size: 1.2rem; }
+  .formSection { padding: 8px 16px 28px; }
+}

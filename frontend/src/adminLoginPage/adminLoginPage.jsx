@@ -16,19 +16,15 @@ export default function AdminLoginPage() {
     try {
       const response = await fetch('https://messapp-ymg5.onrender.com/api/admin/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
 
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('adminToken', data.token);
-
         setUsername('');
         setPassword('');
-        
         navigate('/admin');
       } else {
         const errorData = await response.json();
@@ -42,12 +38,21 @@ export default function AdminLoginPage() {
   return (
     <div className="mainOuter">
       <div className="adminLoginPage">
+
+        {/* ── Header with wave ── */}
         <div className="headerSection">
-          <span className="loginTitle">Admin Login</span>
-          <span className="loginDescription">Enter your username and password</span>
+          <div className="headerTitleBlock">
+            <span className="adminBadge">🛡️ Admin Portal</span>
+            <span className="loginTitle">Admin Login</span>
+            <span className="loginDescription">Enter your username and password</span>
+          </div>
+          <div className="headerIconBadge">⚙️</div>
         </div>
+
+        {/* ── Form ── */}
         <form className="formSection" onSubmit={handleSubmit}>
           {error && <div className="errorMessage">{error}</div>}
+
           <div className="inputSection">
             <label htmlFor="username">Username</label>
             <input
@@ -59,6 +64,7 @@ export default function AdminLoginPage() {
               required
             />
           </div>
+
           <div className="inputSection">
             <label htmlFor="password">Password</label>
             <input
@@ -70,10 +76,12 @@ export default function AdminLoginPage() {
               required
             />
           </div>
+
           <div className="loginButtonDiv">
             <button className="loginButton" type="submit">Login</button>
           </div>
         </form>
+
       </div>
     </div>
   );
