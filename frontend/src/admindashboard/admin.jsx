@@ -47,7 +47,7 @@ export default function AdminPage() {
                 <p>Bulk schedule mess cuts for all students across the hostel.</p>
               </div>
               <div className="cardRight">
-                <Link to="/global-mess" className="arrowBtn">→</Link>
+                <Link to="/global-mess" className="arrowBtn"><span className="btnLabel">Manage</span><span className="btnArrow">→</span></Link>
               </div>
             </div>
 
@@ -59,7 +59,7 @@ export default function AdminPage() {
                 <p>Generate and view detailed monthly attendance analytics.</p>
               </div>
               <div className="cardRight">
-                <Link to="/viewreport" className="arrowBtn">→</Link>
+                <Link to="/viewreport" className="arrowBtn"><span className="btnLabel">View Reports</span><span className="btnArrow">→</span></Link>
               </div>
             </div>
 
@@ -71,7 +71,7 @@ export default function AdminPage() {
                 <p>Add, edit, or remove student accounts and access.</p>
               </div>
               <div className="cardRight">
-                <Link to="/AdminEditing" className="arrowBtn">→</Link>
+                <Link to="/AdminEditing" className="arrowBtn"><span className="btnLabel">Manage Users</span><span className="btnArrow">→</span></Link>
               </div>
             </div>
 
