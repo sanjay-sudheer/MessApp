@@ -48,9 +48,7 @@ function ViewMonthlyReport() {
 
   const filteredData = reportData.filter((r) => {
     const q = search.toLowerCase();
-    const matchesSearch = r.name?.toLowerCase().includes(q) || r.admissionNumber?.toLowerCase().includes(q);
-    const meetsMinPresents = (r.totalPresents ?? 0) >= 10;
-    return matchesSearch && meetsMinPresents;
+    return r.name?.toLowerCase().includes(q) || r.admissionNumber?.toLowerCase().includes(q);
   });
 
   // ── Load script helper ──
