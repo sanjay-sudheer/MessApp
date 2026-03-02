@@ -66,8 +66,7 @@ export default function AdminPage() {
               trigger: <><UserIcon /></>,
               content: (
                 <>
-                  <Button><UserIcon /> Profile</Button>
-                  <Button><SettingsIcon /> Settings</Button>
+                  
                   <Button onClick={handleLogout}>🚪 Logout</Button>
                 </>
               ),
