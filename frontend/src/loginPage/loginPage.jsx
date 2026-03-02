@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import './loginPage.css';
 
 export default function LoginPage() {
@@ -7,32 +7,26 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
       const response = await fetch('https://messapp-ymg5.onrender.com/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ admissionNumber, roomNumber: password }) // Sending roomNumber as password
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admissionNumber, roomNumber: password })
       });
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Store token in local storage
-        localStorage.setItem('inmate', JSON.stringify(data.inmate)); // Store inmate data in local storage
-
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('inmate', JSON.stringify(data.inmate));
         setPassword('');
         setAdmissionNumber('');
-
-        // Navigate to a new route after successful login
-        console.log('Navigating to user profile');
-        navigate('/user-profile'); // Redirect to the dashboard or desired page
+        navigate('/user-profile');
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Login failed');
@@ -44,26 +38,24 @@ export default function LoginPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      // If token is present, redirect to /user-profile
-      console.log('Token found, redirecting to user profile');
-      navigate('/user-profile');
-    } else {
-      console.log('No token found');
-    }
-  }, [navigate]); // Include navigate in the dependency array
+    if (token) navigate('/user-profile');
+  }, [navigate]);
 
   return (
     <div className='mainOuter'>
       <div className="loginPage">
+
         <div className="headerSection">
-          <span className="loginTitle">mess attendance login</span>
-          <span className='userLoginPage-loginDescription'>
+          <span className="messBadge">🍽 Mess Portal</span>
+          <span className="loginTitle">Mess Attendance Login</span>
+          <span className="userLoginPage-loginDescription">
             Enter your admission number and room number
           </span>
         </div>
+
         <form className='formSection' onSubmit={handleSubmit}>
-          {error && <div className="errorMessage">{error}</div>} {/* Error message display */}
+          {error && <div className="errorMessage">{error}</div>}
+
           <div className="inputSection">
             <label htmlFor='AdmissionNumber'>Admission Number (eg: 11111-22)</label>
             <input
@@ -75,6 +67,7 @@ export default function LoginPage() {
               required
             />
           </div>
+
           <div className="inputSection">
             <label htmlFor='roomPassword'>Room Number</label>
             <input
@@ -86,10 +79,12 @@ export default function LoginPage() {
               required
             />
           </div>
+
           <div className="loginButtonDiv">
             <button className="loginButton" type='submit'>Login</button>
           </div>
         </form>
+
       </div>
     </div>
   );
